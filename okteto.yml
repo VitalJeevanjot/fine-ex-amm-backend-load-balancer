@@ -1,0 +1,9 @@
+name: dev-load-balancer-backend-fine-ex-mmm
+image: okteto/node:14
+command: bash
+sync:
+- .:/usr/src/app
+forward:
+- 9239:9229
+- 3002:8080
+autocreate: true

@@ -1,0 +1,74 @@
+[2022-05-23T12:06:23.190Z] INFO - Running at 3000!
+[2022-05-23T12:06:23.220Z] INFO - create_new: {"body":{}}
+[2022-05-23T12:06:23.232Z] ERROR - Unexpected Error: TypeError [ERR_INVALID_ARG_TYPE]: The "key" argument must be of type string or an instance of Buffer, TypedArray, DataView, or KeyObject. Received undefined
+[2022-05-23T12:11:17.963Z] INFO - Running at 3000!
+[2022-05-23T12:11:17.987Z] INFO - create_new: {"body":{"api_key":"c2b3cae2bfa7253cd5bf4ebb7152e534e874ba99","api_secret":"14414ca6fda7b727b3246d3dde7830556a3b63fe7bdbb71dab","api_url":"https://apitest.fine.exchange"}}
+[2022-05-23T12:11:17.998Z] ERROR - Unexpected Error: TypeError [ERR_INVALID_ARG_TYPE]: The "key" argument must be of type string or an instance of Buffer, TypedArray, DataView, or KeyObject. Received undefined
+[2022-05-23T12:12:18.126Z] INFO - Running at 3000!
+[2022-05-23T12:12:18.205Z] INFO - create_new: {"body":{"api_key":"c2b3cae2bfa7253cd5bf4ebb7152e534e874ba99","api_secret":"14414ca6fda7b727b3246d3dde7830556a3b63fe7bdbb71dab","api_url":"https://apitest.fine.exchange"}}
+[2022-05-23T12:12:18.296Z] ERROR - Unexpected Error: TypeError [ERR_INVALID_ARG_TYPE]: The "key" argument must be of type string or an instance of Buffer, TypedArray, DataView, or KeyObject. Received undefined
+[2022-05-23T12:12:36.139Z] INFO - Running at 3000!
+[2022-05-23T12:12:36.167Z] INFO - create_new: {"body":{"api_key":"c2b3cae2bfa7253cd5bf4ebb7152e534e874ba99","api_secret":"14414ca6fda7b727b3246d3dde7830556a3b63fe7bdbb71dab","api_url":"https://apitest.fine.exchange"}}
+[2022-05-23T12:12:36.177Z] ERROR - Unexpected Error: TypeError [ERR_INVALID_ARG_TYPE]: The "key" argument must be of type string or an instance of Buffer, TypedArray, DataView, or KeyObject. Received undefined
+[2022-05-23T12:13:08.555Z] INFO - Running at 3000!
+[2022-05-23T12:13:08.584Z] INFO - create_new: {"body":{"api_key":"c2b3cae2bfa7253cd5bf4ebb7152e534e874ba99","api_secret":"14414ca6fda7b727b3246d3dde7830556a3b63fe7bdbb71dab","api_url":"https://apitest.fine.exchange"}}
+[2022-05-23T12:13:08.602Z] ERROR - Unexpected Error: TypeError [ERR_INVALID_ARG_TYPE]: The "key" argument must be of type string or an instance of Buffer, TypedArray, DataView, or KeyObject. Received undefined
+[2022-05-23T12:13:17.382Z] INFO - Running at 3000!
+[2022-05-23T12:13:17.409Z] INFO - create_new: {"body":{"api_key":"c2b3cae2bfa7253cd5bf4ebb7152e534e874ba99","api_secret":"14414ca6fda7b727b3246d3dde7830556a3b63fe7bdbb71dab","api_url":"https://apitest.fine.exchange"}}
+[2022-05-23T12:13:17.420Z] ERROR - Unexpected Error: TypeError [ERR_INVALID_ARG_TYPE]: The "key" argument must be of type string or an instance of Buffer, TypedArray, DataView, or KeyObject. Received undefined
+[2022-05-23T12:13:52.546Z] INFO - Running at 3000!
+[2022-05-23T12:13:52.571Z] INFO - create_new: {"body":{"api_key":"c2b3cae2bfa7253cd5bf4ebb7152e534e874ba99","api_secret":"14414ca6fda7b727b3246d3dde7830556a3b63fe7bdbb71dab","api_url":"https://apitest.fine.exchange"}}
+[2022-05-23T12:13:52.581Z] ERROR - Unexpected Error: TypeError [ERR_INVALID_ARG_TYPE]: The "key" argument must be of type string or an instance of Buffer, TypedArray, DataView, or KeyObject. Received undefined
+[2022-05-23T12:16:46.052Z] INFO - Running at 3000!
+[2022-05-23T12:16:46.077Z] INFO - create_new: {"body":{"api_key":"c2b3cae2bfa7253cd5bf4ebb7152e534e874ba99","api_secret":"14414ca6fda7b727b3246d3dde7830556a3b63fe7bdbb71dab","api_url":"https://apitest.fine.exchange"}}
+[2022-05-23T12:16:46.092Z] ERROR - Unexpected Error: TypeError [ERR_INVALID_ARG_TYPE]: The "key" argument must be of type string or an instance of Buffer, TypedArray, DataView, or KeyObject. Received undefined
+[2022-05-23T12:17:51.775Z] INFO - Running at 3000!
+[2022-05-23T12:17:51.804Z] INFO - create_new: {"body":{"api_key":"c2b3cae2bfa7253cd5bf4ebb7152e534e874ba99","api_secret":"14414ca6fda7b727b3246d3dde7830556a3b63fe7bdbb71dab","api_url":"https://apitest.fine.exchange"}}
+[2022-05-23T12:17:51.817Z] ERROR - Unexpected Error: TypeError [ERR_INVALID_ARG_TYPE]: The "key" argument must be of type string or an instance of Buffer, TypedArray, DataView, or KeyObject. Received undefined
+[2022-05-23T12:18:00.936Z] INFO - Running at 3000!
+[2022-05-23T12:18:00.969Z] INFO - create_new: {"body":{"api_key":"c2b3cae2bfa7253cd5bf4ebb7152e534e874ba99","api_secret":"14414ca6fda7b727b3246d3dde7830556a3b63fe7bdbb71dab","api_url":"https://apitest.fine.exchange"}}
+[2022-05-23T12:18:00.985Z] ERROR - Unexpected Error: TypeError [ERR_INVALID_ARG_TYPE]: The "key" argument must be of type string or an instance of Buffer, TypedArray, DataView, or KeyObject. Received undefined
+[2022-05-23T12:18:39.461Z] INFO - Running at 3000!
+[2022-05-23T12:18:39.489Z] INFO - create_new: {"body":{"api_key":"c2b3cae2bfa7253cd5bf4ebb7152e534e874ba99","api_secret":"14414ca6fda7b727b3246d3dde7830556a3b63fe7bdbb71dab","api_url":"https://apitest.fine.exchange"}}
+[2022-05-23T12:18:39.512Z] ERROR - Unexpected Error: TypeError [ERR_INVALID_ARG_TYPE]: The "key" argument must be of type string or an instance of Buffer, TypedArray, DataView, or KeyObject. Received undefined
+[2022-05-23T12:18:50.920Z] INFO - Running at 3000!
+[2022-05-23T12:18:50.949Z] INFO - create_new: {"body":{"api_key":"c2b3cae2bfa7253cd5bf4ebb7152e534e874ba99","api_secret":"14414ca6fda7b727b3246d3dde7830556a3b63fe7bdbb71dab","api_url":"https://apitest.fine.exchange"}}
+[2022-05-23T12:18:50.967Z] ERROR - Unexpected Error: TypeError [ERR_INVALID_ARG_TYPE]: The "key" argument must be of type string or an instance of Buffer, TypedArray, DataView, or KeyObject. Received undefined
+[2022-05-23T12:18:58.138Z] INFO - Running at 3000!
+[2022-05-23T12:18:58.172Z] INFO - create_new: {"body":{"api_key":"c2b3cae2bfa7253cd5bf4ebb7152e534e874ba99","api_secret":"14414ca6fda7b727b3246d3dde7830556a3b63fe7bdbb71dab","api_url":"https://apitest.fine.exchange"}}
+[2022-05-23T12:18:58.187Z] ERROR - Unexpected Error: TypeError [ERR_INVALID_ARG_TYPE]: The "key" argument must be of type string or an instance of Buffer, TypedArray, DataView, or KeyObject. Received undefined
+[2022-05-23T12:19:16.053Z] INFO - Running at 3000!
+[2022-05-23T12:19:16.075Z] INFO - create_new: {"body":{"api_key":"c2b3cae2bfa7253cd5bf4ebb7152e534e874ba99","api_secret":"14414ca6fda7b727b3246d3dde7830556a3b63fe7bdbb71dab","api_url":"https://apitest.fine.exchange"}}
+[2022-05-23T12:19:16.090Z] ERROR - Unexpected Error: TypeError [ERR_INVALID_ARG_TYPE]: The "key" argument must be of type string or an instance of Buffer, TypedArray, DataView, or KeyObject. Received undefined
+[2022-05-23T12:19:35.365Z] INFO - Running at 3000!
+[2022-05-23T12:19:35.404Z] INFO - create_new: {"body":{"api_key":"c2b3cae2bfa7253cd5bf4ebb7152e534e874ba99","api_secret":"14414ca6fda7b727b3246d3dde7830556a3b63fe7bdbb71dab","api_url":"https://apitest.fine.exchange"}}
+[2022-05-23T12:19:35.436Z] ERROR - Unexpected Error: TypeError [ERR_INVALID_ARG_TYPE]: The "key" argument must be of type string or an instance of Buffer, TypedArray, DataView, or KeyObject. Received undefined
+[2022-05-23T12:20:30.603Z] INFO - Running at 3000!
+[2022-05-23T12:20:30.636Z] INFO - create_new: {"body":{"api_key":"c2b3cae2bfa7253cd5bf4ebb7152e534e874ba99","api_secret":"14414ca6fda7b727b3246d3dde7830556a3b63fe7bdbb71dab","api_url":"https://apitest.fine.exchange"}}
+[2022-05-23T12:26:57.040Z] INFO - Running at 3000!
+[2022-05-23T12:26:57.072Z] INFO - create_new: {"body":{"api_key":"c2b3cae2bfa7253cd5bf4ebb7152e534e874ba99","api_secret":"14414ca6fda7b727b3246d3dde7830556a3b63fe7bdbb71dab","api_url":"https://apitest.fine.exchange"}}
+[2022-05-23T12:27:14.667Z] INFO - Running at 3000!
+[2022-05-23T12:27:14.696Z] INFO - create_new: {"body":{"api_key":"c2b3cae2bfa7253cd5bf4ebb7152e534e874ba99","api_secret":"14414ca6fda7b727b3246d3dde7830556a3b63fe7bdbb71dab","api_url":"https://apitest.fine.exchange"}}
+[2022-05-23T12:27:56.233Z] INFO - Running at 3000!
+[2022-05-23T12:29:45.957Z] INFO - Running at 3000!
+[2022-05-23T12:29:56.602Z] INFO - Running at 3000!
+[2022-05-23T12:31:53.875Z] INFO - Running at 3000!
+[2022-05-23T12:32:06.266Z] INFO - Running at 3000!
+[2022-05-23T12:32:16.218Z] INFO - Running at 3000!
+[2022-05-23T12:32:49.229Z] INFO - Running at 3000!
+[2022-05-23T12:33:06.549Z] INFO - Running at 3000!
+[2022-05-23T12:33:36.384Z] INFO - Running at 3000!
+[2022-05-23T12:34:10.401Z] INFO - Running at 3000!
+[2022-05-23T12:34:25.623Z] INFO - Running at 3000!
+[2022-05-24T07:27:26.701Z] INFO - Running at 3000!
+[2022-05-24T07:28:37.840Z] INFO - Running at 3000!
+[2022-05-24T07:29:30.670Z] INFO - Running at 3000!
+[2022-05-24T07:30:06.465Z] INFO - Running at 3000!
+[2022-05-24T07:40:53.933Z] INFO - Running at 3000!
+[2022-05-24T07:41:20.420Z] INFO - Running at 3000!
+[2022-05-24T07:51:01.627Z] INFO - Running at 3000!
+[2022-05-24T07:52:00.565Z] INFO - Running at 3000!
+[2022-05-24T07:52:40.966Z] INFO - Running at 3000!
+[2022-05-24T07:54:36.298Z] INFO - Running at 3000!
+[2022-05-24T07:54:54.556Z] INFO - Running at 3000!
+[2022-05-24T07:55:37.854Z] INFO - Running at 3000!
