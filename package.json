@@ -20,7 +20,8 @@
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.19.2",
-    "winston": "^3.3.3"
+    "winston": "^3.7.2",
+    "winston-postgres-transport": "^1.2.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",

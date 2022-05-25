@@ -111,16 +111,15 @@ async function callCreateNewURL(url: string, req_body: any) {
     logger.info("create_new_server_call_response: " + JSON.stringify(res.data))
     return res.status(200).send(res.data.message)
   }).catch((e: any) => {
-    console.log('create_new_error_on_server_calling:')
-    console.log(e)
     logger.info("create_new_error_on_server_calling: " + e.toString())
-    logger.info("create_new_trying_again_after: " + e.message + " from: " + url +  " for: " + JSON.stringify(req_body))
+    logger.info("create_new_error: " + e.message + " from: " + url +  " for: " + JSON.stringify(req_body))
     
-    serverTurn++
-    if(serverTurn > maxServers) {
-      serverTurn = 1
-    }
-    callCreateNewURL(url, req_body)
+    // Under different circumstances retries can halt server so avoid them for now....
+    // serverTurn++
+    // if(serverTurn > maxServers) {
+    //   serverTurn = 1
+    // }
+    // callCreateNewURL(url, req_body)
   })
 }
 
