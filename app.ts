@@ -1,7 +1,7 @@
 import express from 'express';
 import logger from './logger';
 import * as queueController from './controller/serverRequestController'
-// import axios from 'axios'
+import axios from 'axios'
 
 const app = express();
 
@@ -18,7 +18,10 @@ app.use(function (req, res, next) {
 app.get('/my_services', queueController.my_services)
 app.post('/create_new', queueController.create_new)
 
-app.listen(port, () => logger.info(`Running at ${port}!`))
+app.listen(port, () => {
+  logger.info(`Running at ${port}!`)
+  logger.info(`again logging same Running at ${port}!`)
+})
 
 // axios.get('http://dev-db-backend-fine-ex-mmm.fine-ex-genievot.svc.cluster.local:8080/my_services')
 // .then((res) => {
@@ -26,4 +29,13 @@ app.listen(port, () => logger.info(`Running at ${port}!`))
 // }).catch((e) => {
 //   console.log(e)
 // })
-
+for (let index = 0; index < 15; index++) {
+  axios.get('http://localhost:8080/my_services', {
+    data: {index: index}
+  })
+  .then((res: any) => {
+    console.log(res.data)
+  }).catch((e: any) => {
+    console.log(e.message)
+  })
+}

@@ -18,11 +18,10 @@ var serverTurn = 1;
 
 const my_services = async (req: Request, res: Response) => {
   try {
-    console.log('services')
     logger.info("my_services: " + JSON.stringify(req.body))
     return res.status(200).send('data412523523412')
   } catch (e: any) {
-    logger.error('Unexpected Error: ' + e.toString())
+    logger.error('my_services_error: ' + e.toString())
     return res.status(500).json({
       'message': 'Unexpected error'
     })
