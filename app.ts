@@ -29,13 +29,13 @@ app.listen(port, () => {
 // }).catch((e) => {
 //   console.log(e)
 // })
-for (let index = 0; index < 15; index++) {
-  axios.get('http://localhost:8080/my_services', {
-    data: {index: index}
-  })
-  .then((res: any) => {
+async function test() {
+  for (let index = 0; index < 35; index++) {
+    setTimeout
+    const res = await axios.get('http://localhost:8080/my_services', {
+      data: {index: index}
+    })
     console.log(res.data)
-  }).catch((e: any) => {
-    console.log(e.message)
-  })
+  }
 }
+test()

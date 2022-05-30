@@ -33,7 +33,8 @@ const create_new = async (req: Request, res: Response) => {
   try {
     // let add_jobs = addJobs(req.body)
     logger.info("create_new: " + JSON.stringify(req.body))
-    var url = `http://${setRequiredVariable(`${mapServers[serverTurn]}_URL`)}:${setRequiredVariable(`${mapServers[serverTurn]}_PORT`)}/${setRequiredVariable('CREATE_NEW_ENDPOINT')}`
+    // TODO: change https to http if not work
+    var url = `https://${setRequiredVariable(`${mapServers[serverTurn]}_URL`)}:${setRequiredVariable(`${mapServers[serverTurn]}_PORT`)}/${setRequiredVariable('CREATE_NEW_ENDPOINT')}`
     logger.info("create_new_constructed_url: " + url.toString())
     
     var result: any = await callCreateNewURL(url, req.body)
