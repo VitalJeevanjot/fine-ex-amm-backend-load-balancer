@@ -20,7 +20,6 @@ app.post('/create_new', queueController.create_new)
 
 app.listen(port, () => {
   logger.info(`Running at ${port}!`)
-  logger.info(`again logging same Running at ${port}!`)
 })
 
 // axios.get('http://dev-db-backend-fine-ex-mmm.fine-ex-genievot.svc.cluster.local:8080/my_services')

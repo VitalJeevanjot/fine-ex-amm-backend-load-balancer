@@ -34,10 +34,10 @@ const create_new = async (req: Request, res: Response) => {
     // let add_jobs = addJobs(req.body)
     logger.info("create_new: " + JSON.stringify(req.body))
     // TODO: change https to http if not work
-    var url = `https://${setRequiredVariable(`${mapServers[serverTurn]}_URL`)}:${setRequiredVariable(`${mapServers[serverTurn]}_PORT`)}/${setRequiredVariable('CREATE_NEW_ENDPOINT')}`
+    var url = `http://${setRequiredVariable(`${mapServers[serverTurn]}_URL`)}:${setRequiredVariable(`${mapServers[serverTurn]}_PORT`)}${setRequiredVariable('CREATE_NEW_ENDPOINT')}`
     logger.info("create_new_constructed_url: " + url.toString())
     
-    var result: any = await callCreateNewURL(url, req.body)
+    var result: any = await callCreateNewURL(url, req.body, res)
     serverTurn++
     if(serverTurn > maxServers) {
       serverTurn = 1
@@ -104,13 +104,14 @@ export {
 
 
 
-async function callCreateNewURL(url: string, req_body: any) {
+async function callCreateNewURL(url: string, req_body: any, res: Response) {
   try {
-    let res = await axios.post(url, {
+    console.log(req_body.body)
+    let _res = await axios.post(url, {
       body: req_body.body
     })
-    logger.info("create_new_server_call_response: " + JSON.stringify(res.data))
-    return res.status(200).send(res.data.message)
+    logger.info("create_new_server_call_response: " + JSON.stringify(_res.data))
+    return res.status(200).send(_res.data.message)
   } catch(e: any) {
     logger.info("create_new_error_on_server_calling: " + e.toString())
     logger.info("create_new_error: " + e.message + " from: " + url +  " for: " + JSON.stringify(req_body))
