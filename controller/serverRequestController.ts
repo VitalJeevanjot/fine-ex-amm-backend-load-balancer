@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { setRequiredVariable, getUserDetails } from '../helpers';
+import { setRequiredVariable } from '../helpers';
 import logger from '../logger';
 // import { addJobs } from './helpers/queue_helper';
 import axios from 'axios'
@@ -9,7 +9,7 @@ import axios from 'axios'
 
 // var user_task_control = new db.table('user_task_control')
 
-var maxServers = 2;
+var maxServers = 1;
 var mapServers: any = {
   1: 'SERVER_ONE',
   2: 'SERVER_TWO'
@@ -105,22 +105,22 @@ export {
 
 
 async function callCreateNewURL(url: string, req_body: any) {
-  axios.post(url, {
-    body: req_body.body
-  }).then((res: any) => {
+  try {
+    let res = await axios.post(url, {
+      body: req_body.body
+    })
     logger.info("create_new_server_call_response: " + JSON.stringify(res.data))
     return res.status(200).send(res.data.message)
-  }).catch((e: any) => {
+  } catch(e: any) {
     logger.info("create_new_error_on_server_calling: " + e.toString())
     logger.info("create_new_error: " + e.message + " from: " + url +  " for: " + JSON.stringify(req_body))
-    
+  }
     // Under different circumstances retries can halt server so avoid them for now....
     // serverTurn++
     // if(serverTurn > maxServers) {
     //   serverTurn = 1
     // }
     // callCreateNewURL(url, req_body)
-  })
 }
 
 // Testing...
