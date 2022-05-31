@@ -4,6 +4,6 @@ command: bash
 sync:
 - .:/usr/src/app
 forward:
-- 9239:9229
-- 3002:8080
+- 9249:9229
+- 3003:8080
 autocreate: true
