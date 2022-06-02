@@ -2,6 +2,8 @@ import express from 'express';
 import logger from './logger';
 import * as queueController from './controller/serverRequestController'
 import axios from 'axios'
+const Cryptr = require('cryptr');
+
 
 const app = express();
 
@@ -17,6 +19,7 @@ app.use(function (req, res, next) {
 // app.get('/', queueController.say_hello)
 app.get('/my_services', queueController.my_services)
 app.post('/create_new', queueController.create_new)
+app.post('/encrypt_login', queueController.encrypt_login)
 
 app.listen(port, () => {
   logger.info(`Running at ${port}!`)
