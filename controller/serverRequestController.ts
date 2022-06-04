@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { setRequiredVariable, encryptData } from '../helpers';
+import { setRequiredVariable, encryptData, getUserDetails } from '../helpers';
 import logger from '../logger';
 // import { addJobs } from './helpers/queue_helper';
 import axios from 'axios'
@@ -19,12 +19,30 @@ var serverTurn = 1;
 
 const my_services = async (req: Request, res: Response) => {
   try {
-    logger.info("my_services: " + encryptData(JSON.stringify(req.body)))
-    return res.status(200).send('data412523523412')
+    try {
+      if(req.body.body.login_api_apiKey_S.toString().length != 15) {
+        throw "API key for logs not provided"
+      }
+    } catch(e) {
+      logger.info("encrypt_login: " + "API key for logs not provided or not correct length: " + req.body.body.login_api_apiKey_S + " :" + encryptData(JSON.stringify(req.body)))
+      return res.status(500).json({
+        'message': 'Object error logger key not correct!'
+      })
+    }
+    // ------
+
+    logger.info("my_services: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
+    var url = `http://${setRequiredVariable('SERVER_DB_URL')}:${setRequiredVariable('SERVER_DB_PORT')}${setRequiredVariable('GET_SERVICES_ENDPOINT')}`
+
+    var res = await axios.get(url, {
+      body: req.body
+    })
+
+    return res.status(200).send({services: res.data})
   } catch (e: any) {
-    logger.error('my_services_error: ' + e.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
+    logger.error('my_services_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + e.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
     return res.status(500).json({
-      'message': 'Unexpected error'
+      'message': 'Unable to fetch data.'
     })
   }
 
@@ -32,12 +50,36 @@ const my_services = async (req: Request, res: Response) => {
 
 const encrypt_login = async (req: Request, res: Response) => {
   try {
-    logger.info("encrypt_login: " + encryptData(JSON.stringify(req.body)))
-    var _key = encryptData(req.body.body.login_api_apiKey)
+    try {
+      if(req.body.body.login_api_apiKey_S.toString().length != 15) {
+        throw "API key for logs not provided"
+      }
+    } catch(e) {
+      logger.info("encrypt_login: " + "API key for logs not provided or not correct length: " + req.body.body.login_api_apiKey_S + " :" + encryptData(JSON.stringify(req.body)))
+      return res.status(500).json({
+        'message': 'Object error logger key not correct!'
+      })
+    }
+     // ------
+
+
+    logger.info("encrypt_login: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
+     
+    try{
+       var user = getUserDetails(req.body.body.login_api_apiKey, req.body.body.login_api_secretKey, req.body.body.login_api_exchangeURL)
+       logger.info("encrypt_login: " + "user_details: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(user)))
+    }
+    catch(e: any) {
+      logger.error('encrypt_login_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + e.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
+      return res.status(500).json({
+        'message': 'Incorrect API details provided!'
+      })
+    }
+    var _key = req.body.body.login_api_apiKey.toString().subString(0,7) + encryptData(req.body.body.login_api_apiKey)
     var _secret = encryptData(req.body.body.login_api_secretKey)
     return res.status(200).send({login_api_apiKey_enc: _key, login_api_secretKey_enc: _secret})
   } catch (e: any) {
-    logger.error('encrypt_login_error: ' + e.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
+    logger.error('encrypt_login_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + e.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
     return res.status(500).json({
       'message': 'Unexpected error'
     })
@@ -47,11 +89,25 @@ const encrypt_login = async (req: Request, res: Response) => {
 
 const create_new = async (req: Request, res: Response) => {
   try {
+    try {
+      if(req.body.body.login_api_apiKey_S.toString().length != 15) {
+        throw "API key for logs not provided"
+      }
+    } catch(e) {
+      logger.info("encrypt_login: " + "API key for logs not provided or not correct length: " + req.body.body.login_api_apiKey_S + " :" + encryptData(JSON.stringify(req.body)))
+      return res.status(500).json({
+        'message': 'Object error logger key not correct!'
+      })
+    }
+     // ------
+
+
+    
     // let add_jobs = addJobs(req.body)
-    logger.info("create_new: " + encryptData(JSON.stringify(req.body)))
+    logger.info("create_new: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
     // TODO: change https to http if not work
     var url = `http://${setRequiredVariable(`${mapServers[serverTurn]}_URL`)}:${setRequiredVariable(`${mapServers[serverTurn]}_PORT`)}${setRequiredVariable('CREATE_NEW_ENDPOINT')}`
-    logger.info("create_new_constructed_url: " + url.toString())
+    logger.info("create_new_constructed_url: " + req.body.body.login_api_apiKey_S.toString() +": " + url.toString())
     
     var result: any = await callCreateNewURL(url, req.body, res)
     serverTurn++
