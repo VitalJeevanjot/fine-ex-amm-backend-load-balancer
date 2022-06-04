@@ -1,5 +1,11 @@
 import { Request, Response } from 'express';
-import { setRequiredVariable, encryptData, getUserDetails } from '../helpers';
+import { 
+  setRequiredVariable, 
+  encryptData, 
+  getUserDetails, 
+  checkLoginKey,
+  checkUserDetails
+} from '../helpers';
 import logger from '../logger';
 // import { addJobs } from './helpers/queue_helper';
 import axios from 'axios'
@@ -19,20 +25,16 @@ var serverTurn = 1;
 
 const my_services = async (req: Request, res: Response) => {
   try {
-    try {
-      if(req.body.body.login_api_apiKey_S.toString().length != 15) {
-        throw "API key for logs not provided"
-      }
-    } catch(e) {
-      logger.info("encrypt_login: " + "API key for logs not provided or not correct length: " + req.body.body.login_api_apiKey_S + " :" + encryptData(JSON.stringify(req.body)))
-      return res.status(500).json({
-        'message': 'Object error logger key not correct!'
-      })
-    }
-    // ------
+    await checkLoginKey(req, logger, res)
 
     logger.info("my_services: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
     var url = `http://${setRequiredVariable('SERVER_DB_URL')}:${setRequiredVariable('SERVER_DB_PORT')}${setRequiredVariable('GET_SERVICES_ENDPOINT')}`
+    
+    let _res: any = await checkUserDetails(req, logger, res, "my_services")
+    if(!_res.email) {return _res}
+    
+
+
 
     var res = await axios.get(url, {
       body: req.body
@@ -50,38 +52,28 @@ const my_services = async (req: Request, res: Response) => {
 
 const encrypt_login = async (req: Request, res: Response) => {
   try {
-    try {
-      if(req.body.body.login_api_apiKey_S.toString().length != 15) {
-        throw "API key for logs not provided"
-      }
-    } catch(e) {
-      logger.info("encrypt_login: " + "API key for logs not provided or not correct length: " + req.body.body.login_api_apiKey_S + " :" + encryptData(JSON.stringify(req.body)))
-      return res.status(500).json({
-        'message': 'Object error logger key not correct!'
-      })
-    }
-     // ------
-
+    await checkLoginKey(res, logger, req)
 
     logger.info("encrypt_login: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
      
-    try{
-       var user = getUserDetails(req.body.body.login_api_apiKey, req.body.body.login_api_secretKey, req.body.body.login_api_exchangeURL)
-       logger.info("encrypt_login: " + "user_details: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(user)))
-    }
-    catch(e: any) {
-      logger.error('encrypt_login_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + e.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
+    let _res: any = await checkUserDetails(req, logger, res, "encrypt_login")
+    if(!_res.email) {return _res}
+
+    if(req.body.body.login_api_apiKey_S.toString() != req.body.body.login_api_apiKey.toString().subString(0,15)) {
+      logger.info("encrypt_login: keys_not_matched: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
       return res.status(500).json({
-        'message': 'Incorrect API details provided!'
+        'message': 'Error from client side!'
       })
     }
-    var _key = req.body.body.login_api_apiKey.toString().subString(0,7) + encryptData(req.body.body.login_api_apiKey)
+
+    var _key = req.body.body.login_api_apiKey.toString().subString(0,15) + encryptData(req.body.body.login_api_apiKey)
     var _secret = encryptData(req.body.body.login_api_secretKey)
-    return res.status(200).send({login_api_apiKey_enc: _key, login_api_secretKey_enc: _secret})
+    
+    return res.status(200).send({login_api_apiKey_enc: _key, login_api_secretKey_enc: _secret, message: '<span class="text-grey-10 text-bold">Login key <span class="text-blue-grey-8">Saved!</span></span>'})
   } catch (e: any) {
     logger.error('encrypt_login_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + e.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
     return res.status(500).json({
-      'message': 'Unexpected error'
+      'message': 'Unexpected error!'
     })
   }
 
@@ -89,19 +81,7 @@ const encrypt_login = async (req: Request, res: Response) => {
 
 const create_new = async (req: Request, res: Response) => {
   try {
-    try {
-      if(req.body.body.login_api_apiKey_S.toString().length != 15) {
-        throw "API key for logs not provided"
-      }
-    } catch(e) {
-      logger.info("encrypt_login: " + "API key for logs not provided or not correct length: " + req.body.body.login_api_apiKey_S + " :" + encryptData(JSON.stringify(req.body)))
-      return res.status(500).json({
-        'message': 'Object error logger key not correct!'
-      })
-    }
-     // ------
-
-
+    checkLoginKey(res, logger, req)
     
     // let add_jobs = addJobs(req.body)
     logger.info("create_new: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
