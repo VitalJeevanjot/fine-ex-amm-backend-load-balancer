@@ -49,7 +49,7 @@ const getUserDetails = async (api_key: string, api_secret: string, api_url: stri
       }
     })
   } catch (e: any) {
-    return { code: e.code, ...e.response }
+    return { code: e.code, ...e.response, data: e.response.data }
   }
   return res.data
 }
@@ -63,20 +63,24 @@ const checkLoginKey = async (req: any, logger: any, res:any) => {
     } catch(e) {
       logger.info("encrypt_login: " + "API key for logs not provided or not correct length: " + req.body.body.login_api_apiKey_S + " :" + encryptData(JSON.stringify(req.body)))
       return res.status(500).json({
-        'message': 'Object error logger key not correct!'
+        'message': 'cl_key: Object error logger key not correct!'
       })
     }
 }
 
 const checkUserDetails = async(req: any, logger:any, res: any, route: string) => {
+  let user: any
   try {
-    const user: any = await getUserDetails(req.body.body.login_api_apiKey, req.body.body.login_api_secretKey, req.body.body.login_api_exchangeURL)
+    console.log(req.body.body.login_api_apiKey)
+    console.log(req.body.body.login_api_secretKey)
+    console.log(req.body.body.login_api_exchangeURL)
+    user = await getUserDetails(req.body.body.login_api_apiKey, req.body.body.login_api_secretKey, req.body.body.login_api_exchangeURL)
     logger.info(route + ": " + "fetch_user_data: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(user)))
     return user
   } catch(e:any) {
     logger.info(route + ": " + "fetch_user_data_error: " +  req.body.body.login_api_apiKey_S.toString() +": " + e.toString() + " for__: " + encryptData(JSON.stringify(req.body)))
     return res.status(500).json({
-      'message': 'Unable to login with these credentials!'
+      'message': 'cu_details: Unable to login with these credentials!'
     })
   }
 }
