@@ -23,7 +23,7 @@ const encryptData = (variableName: string) => {
 }
 
 const decryptData = (variableName: string) => {
-  return cryptr.encrypt(variableName)
+  return cryptr.decrypt(variableName)
 }
 
 
@@ -51,19 +51,20 @@ const getUserDetails = async (api_key: string, api_secret: string, api_url: stri
   } catch (e: any) {
     return { code: e.code, ...e.response, data: e.response.data }
   }
-  return res.data
+  return res
 }
 
 
-const checkLoginKey = async (req: any, logger: any, res:any) => {
+const checkLoginKey = async (req: any, logger: any, res:any, path: string, full_path: string) => {
   try {
-      if(req.body.body.login_api_apiKey_S.toString().length != 15) {
+      if(req.body.body.login_api_apiKey_S.toString() != req.body.body.login_api_apiKey.toString().substring(0,15)) {
+        logger.info(full_path + ": keys_not_matched: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
         throw "API key for logs not provided"
       }
     } catch(e) {
-      logger.info("encrypt_login: " + "API key for logs not provided or not correct length: " + req.body.body.login_api_apiKey_S + " :" + encryptData(JSON.stringify(req.body)))
+      logger.info(full_path + ": " + "API key for logs not provided or not correct length: " + req.body.body.login_api_apiKey_S + " :" + encryptData(JSON.stringify(req.body)))
       return res.status(500).json({
-        'message': 'cl_key: Object error logger key not correct!'
+        'message': path + ': cl_key: Error from client side!'
       })
     }
 }
@@ -71,13 +72,19 @@ const checkLoginKey = async (req: any, logger: any, res:any) => {
 const checkUserDetails = async(req: any, logger:any, res: any, route: string) => {
   let user: any
   try {
-    console.log(req.body.body.login_api_apiKey)
-    console.log(req.body.body.login_api_secretKey)
-    console.log(req.body.body.login_api_exchangeURL)
-    user = await getUserDetails(req.body.body.login_api_apiKey, req.body.body.login_api_secretKey, req.body.body.login_api_exchangeURL)
-    logger.info(route + ": " + "fetch_user_data: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(user)))
+    console.log("-" + decryptData(req.body.body.login_api_apiKey.toString().substring(15)))
+    console.log("-" + decryptData(req.body.body.login_api_secretKey))
+    console.log("-" + req.body.body.login_api_exchangeURL)
+    user = await getUserDetails(
+      decryptData(req.body.body.login_api_apiKey.toString().substring(15)), 
+      decryptData(req.body.body.login_api_secretKey), 
+      req.body.body.login_api_exchangeURL
+    )
+    console.log(user.data)
+    logger.info(route + ": " + "fetch_user_data: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(user.data)))
     return user
   } catch(e:any) {
+    console.log(e)
     logger.info(route + ": " + "fetch_user_data_error: " +  req.body.body.login_api_apiKey_S.toString() +": " + e.toString() + " for__: " + encryptData(JSON.stringify(req.body)))
     return res.status(500).json({
       'message': 'cu_details: Unable to login with these credentials!'

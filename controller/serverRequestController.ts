@@ -25,19 +25,17 @@ var serverTurn = 1;
 
 const my_services = async (req: Request, res: Response) => {
   try {
-    await checkLoginKey(req, logger, res)
+    await checkLoginKey(req, logger, res, 'm_services', 'my_services')
 
     logger.info("my_services: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
     var url = `http://${setRequiredVariable('SERVER_DB_URL')}:${setRequiredVariable('SERVER_DB_PORT')}${setRequiredVariable('GET_SERVICES_ENDPOINT')}`
     
     let res_user: any = await checkUserDetails(req, logger, res, "my_services")
     if(!res_user.email) {return res_user}
-    
-
 
 
     var res_db = await axios.get(url, {
-      data: req.body
+      data: {email: res_user.email, logger_Key: req.body.body.login_api_apiKey_S.toString()}
     })
 
     return res.status(200).send({services: res_db.data})
@@ -52,19 +50,12 @@ const my_services = async (req: Request, res: Response) => {
 
 const encrypt_login = async (req: Request, res: Response) => {
   try {
-    await checkLoginKey(req, logger, res)
+    await checkLoginKey(req, logger, res, 'e_login', 'encrypt_login')
 
     logger.info("encrypt_login: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
      
     let _res: any = await checkUserDetails(req, logger, res, "encrypt_login")
     if(!_res.email) {return _res}
-
-    if(req.body.body.login_api_apiKey_S.toString() != req.body.body.login_api_apiKey.toString().substring(0,15)) {
-      logger.info("encrypt_login: keys_not_matched: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
-      return res.status(500).json({
-        'message': 'e_login: Error from client side!'
-      })
-    }
 
     var _key = req.body.body.login_api_apiKey.toString().substring(0,15) + encryptData(req.body.body.login_api_apiKey)
     var _secret = encryptData(req.body.body.login_api_secretKey)
@@ -81,7 +72,7 @@ const encrypt_login = async (req: Request, res: Response) => {
 
 const create_new = async (req: Request, res: Response) => {
   try {
-    checkLoginKey(res, logger, req)
+    checkLoginKey(res, logger, req, 'c_new', 'create_new')
     
     // let add_jobs = addJobs(req.body)
     logger.info("create_new: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
@@ -102,10 +93,10 @@ const create_new = async (req: Request, res: Response) => {
     //   req.body.body.api_url
     // )
 
-    // console.log(user_details)
-    // user_task_control.set(`${user_details.email}.id`, user_details.id)
+    // console.log(user_details.data)
+    // user_task_control.set(`${user_details.data.email}.id`, user_details.data.id)
 
-    // console.log(user_details)
+    // console.log(user_details.data)
     // console.log('DB all')
     // console.log(user_task_control.all())
     // console.log(user_task_control.get(user_details.email))
