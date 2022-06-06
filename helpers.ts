@@ -58,11 +58,11 @@ const getUserDetails = async (api_key: string, api_secret: string, api_url: stri
 const checkLoginKey = async (req: any, logger: any, res:any, path: string, full_path: string) => {
   try {
       if(req.body.body.login_api_apiKey_S.toString() != req.body.body.login_api_apiKey.toString().substring(0,15)) {
-        logger.info(full_path + ": keys_not_matched: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
+        logger.info("databaseHandler: " + full_path + ": keys_not_matched: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
         throw "API key for logs not provided"
       }
     } catch(e) {
-      logger.info(full_path + ": " + "API key for logs not provided or not correct length: " + req.body.body.login_api_apiKey_S + " :" + encryptData(JSON.stringify(req.body)))
+      logger.info("databaseHandler: " + full_path + ": " + "API key for logs not provided or not correct length: " + req.body.body.login_api_apiKey_S + " :" + encryptData(JSON.stringify(req.body)))
       return res.status(500).json({
         'message': path + ': cl_key: Error from client side!'
       })
@@ -81,11 +81,11 @@ const checkUserDetails = async(req: any, logger:any, res: any, route: string) =>
       req.body.body.login_api_exchangeURL
     )
     // console.log(user.data)
-    logger.info(route + ": " + "fetch_user_data: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(user.data)))
-    return user
+    logger.info("databaseHandler: " + route + ": " + "fetch_user_data: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(user.data)))
+    return user.data
   } catch(e:any) {
     console.log(e)
-    logger.info(route + ": " + "fetch_user_data_error: " +  req.body.body.login_api_apiKey_S.toString() +": " + e.toString() + " for__: " + encryptData(JSON.stringify(req.body)))
+    logger.info("databaseHandler: " + route + ": " + "fetch_user_data_error: " +  req.body.body.login_api_apiKey_S.toString() +": " + e.toString() + " for__: " + encryptData(JSON.stringify(req.body)))
     return res.status(500).json({
       'message': 'cu_details: Unable to login with these credentials!'
     })
