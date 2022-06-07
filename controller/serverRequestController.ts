@@ -137,10 +137,10 @@ async function callCreateNewURL(url: string, req_body: any, res: Response, login
       api_email: api_email,
     })
 
-    logger.info("loadbalancer: create_new_function: " + JSON.stringify(_res.data))
+    logger.info("loadbalancer: create_new_function: " + logger_key + ": " + JSON.stringify(_res.data))
     return res.status(200).send(_res.data.message)
   } catch(e: any) {
-    logger.info("loadbalancer: create_new_function_error: " + e.stack.toString() + " from: " + url + " for__:" + encryptData(JSON.stringify(req_body)))
+    logger.info("loadbalancer: create_new_function_error: " + logger_key + ": " + e.stack.toString() + " from: " + url + " for__:" + encryptData(JSON.stringify(req_body)))
   }
     // Under different circumstances retries can halt server so avoid them for now....
     // serverTurn++
