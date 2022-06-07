@@ -45,11 +45,11 @@ const my_services = async (req: Request, res: Response) => {
   } catch (e: any) {
     console.log(e)
     if(e.response) {
-      logger.info('loadbalancer: my_services_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + e.response.data.message.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
+      logger.info('loadbalancer: my_services_error: ' + req.body.body.login_api_apiKey_S.toString() +": e_response" + e.response.data.message.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
     } else if(e.stack) {
-      logger.info('loadbalancer: my_services_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + ": e_message: " + e.message + ": e_stack: " + e.stack.toString()+ " for__:" + encryptData(JSON.stringify(req.body)))
+      logger.info('loadbalancer: my_services_error: ' + req.body.body.login_api_apiKey_S.toString() +": e_message: " + e.message + ": e_stack: " + e.stack.toString()+ " for__:" + encryptData(JSON.stringify(req.body)))
     } else {
-      logger.info('loadbalancer: my_services_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + e.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
+      logger.info('loadbalancer: my_services_error: ' + req.body.body.login_api_apiKey_S.toString() +": e_to_string: " + e.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
     }
 
     return res.status(500).json({
@@ -73,7 +73,7 @@ const encrypt_login = async (req: Request, res: Response) => {
     
     return res.status(200).send({login_api_apiKey_enc: _key, login_api_secretKey_enc: _secret, message: '<span class="text-grey-10 text-bold">Login key <span class="text-blue-grey-8">Saved!</span></span>'})
   } catch (e: any) {
-    logger.info('loadbalancer: encrypt_login_error: ' + req.body.body.login_api_apiKey_S +": " + ": e_message: " + e.message + ": e_stack: " + e.stack.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
+    logger.info('loadbalancer: encrypt_login_error: ' + req.body.body.login_api_apiKey_S +": e_message: " + e.message + ": e_stack: " + e.stack.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
     return res.status(500).json({
       'message': 'e_login: Unexpected error: ' + e.message
     })
