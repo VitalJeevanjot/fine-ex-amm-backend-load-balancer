@@ -47,7 +47,7 @@ const my_services = async (req: Request, res: Response) => {
     if(e.response) {
       logger.info('loadbalancer: my_services_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + e.response.data.message.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
     } else if(e.stack) {
-      logger.info('loadbalancer: my_services_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + e.stack.toString()+ " for__:" + encryptData(JSON.stringify(req.body)))
+      logger.info('loadbalancer: my_services_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + ": e_message: " + e.message + ": e_stack: " + e.stack.toString()+ " for__:" + encryptData(JSON.stringify(req.body)))
     } else {
       logger.info('loadbalancer: my_services_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + e.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
     }
@@ -73,7 +73,7 @@ const encrypt_login = async (req: Request, res: Response) => {
     
     return res.status(200).send({login_api_apiKey_enc: _key, login_api_secretKey_enc: _secret, message: '<span class="text-grey-10 text-bold">Login key <span class="text-blue-grey-8">Saved!</span></span>'})
   } catch (e: any) {
-    logger.info('loadbalancer: encrypt_login_error: ' + req.body.body.login_api_apiKey_S +": " + e.stack.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
+    logger.info('loadbalancer: encrypt_login_error: ' + req.body.body.login_api_apiKey_S +": " + ": e_message: " + e.message + ": e_stack: " + e.stack.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
     return res.status(500).json({
       'message': 'e_login: Unexpected error: ' + e.message
     })
@@ -113,7 +113,7 @@ const create_new = async (req: Request, res: Response) => {
     }
     return result
   } catch (e: any) {
-    logger.info('loadbalancer: encrypt_login: ' + e.stack.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
+    logger.info('loadbalancer: encrypt_login: ' + ": e_message: " + e.message + ": e_stack: " + e.stack.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
     return res.status(500).json({
       'message': 'c_new: Unexpected error: ' + e.message
     })
@@ -136,18 +136,17 @@ async function callCreateNewURL(url: string, req_body: any, res: Response, login
       login_email: login_email,
       api_email: api_email,
     })
+    if(_res.data.status == 'running') {
 
+    }
     logger.info("loadbalancer: create_new_function: " + logger_key + ": " + JSON.stringify(_res.data))
     return res.status(200).send(_res.data.message)
   } catch(e: any) {
-    logger.info("loadbalancer: create_new_function_error: " + logger_key + ": " + e.stack.toString() + " from: " + url + " for__:" + encryptData(JSON.stringify(req_body)))
+    logger.info("loadbalancer: create_new_function_error: " + logger_key + ": e_message: " + e.message + ": e_stack: " + e.stack.toString() + " from: " + url + " for__:" + encryptData(JSON.stringify(req_body)))
+    return res.status(500).send({
+      'message': 'c_new_fn: Unexpected error: ' + e.message
+    })
   }
-    // Under different circumstances retries can halt server so avoid them for now....
-    // serverTurn++
-    // if(serverTurn > maxServers) {
-    //   serverTurn = 1
-    // }
-    // callCreateNewURL(url, req_body)
 }
 
 // Testing...
