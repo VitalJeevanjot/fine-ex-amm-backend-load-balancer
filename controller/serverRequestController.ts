@@ -136,10 +136,10 @@ async function callCreateNewURL(url: string, req_body: any, res: Response, login
       login_email: login_email,
       api_email: api_email,
     })
-    if(_res.data.status == 'running') {
-
+    if(_res.data.status != 'running') {
+      throw 'New task not created!'
     }
-    logger.info("loadbalancer: create_new_function: " + logger_key + ": " + JSON.stringify(_res.data))
+    logger.info("loadbalancer: create_new_function: " + logger_key + ": " + encryptData(JSON.stringify(_res.data)))
     return res.status(200).send(_res.data.message)
   } catch(e: any) {
     logger.info("loadbalancer: create_new_function_error: " + logger_key + ": e_message: " + e.message + ": e_stack: " + e.stack.toString() + " from: " + url + " for__:" + encryptData(JSON.stringify(req_body)))
