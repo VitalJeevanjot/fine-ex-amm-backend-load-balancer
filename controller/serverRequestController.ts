@@ -142,7 +142,7 @@ async function callCreateNewURL(url: string, req_body: any, res: Response, login
     logger.info("loadbalancer: create_new_function: " + logger_key + ": " + encryptData(JSON.stringify(_res.data)))
     return res.status(200).send(_res.data.message)
   } catch(e: any) {
-    logger.info("loadbalancer: create_new_function_error: " + logger_key + ": e_message: " + e.message + ": e_stack: " + e.stack.toString() + " from: " + url + " for__:" + encryptData(JSON.stringify(req_body)))
+    logger.info("loadbalancer: create_new_function_error: " + logger_key + ": e_message: " + e.message + ": e_stack: " + e.stack.toString() + ": login_email: " + login_email + ": api_email: " + api_email +  ": from: " + url + " for__:" + encryptData(JSON.stringify(req_body)))
     return res.status(500).send({
       'message': 'c_new_fn: Unexpected error: ' + e.message
     })
