@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import { 
   setRequiredVariable, 
   encryptData, 
-  getUserDetails, 
   checkLoginKey,
+  checkLoginDetails,
   checkUserDetails
 } from '../helpers';
 import logger from '../logger';
@@ -16,7 +16,7 @@ import axios from 'axios'
 
 // var user_task_control = new db.table('user_task_control')
 
-var maxServers = 1;
+var maxServers = setRequiredVariable('MAX_SERVERS');
 var mapServers: any = {
   1: 'SERVER_ONE',
   2: 'SERVER_TWO'
@@ -26,34 +26,30 @@ var serverTurn = 1;
 const my_services = async (req: Request, res: Response) => {
   try {
     await checkLoginKey(req, logger, res, 'm_services', 'my_services')
-
-    logger.info("loadbalancer: my_services: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
-    var url = `http://${setRequiredVariable('SERVER_DB_URL')}:${setRequiredVariable('SERVER_DB_PORT')}${setRequiredVariable('GET_SERVICES_ENDPOINT')}`
     
-    let res_user: any = await checkUserDetails(req, logger, res, "my_services")
-    console.log("res_user.email")
-    console.log(res_user.email)
+    logger.info("loadbalancer: my_services: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
+    
+    let res_user: any = await checkLoginDetails(req, logger, res, "my_services")
     if(!res_user.email) {return res_user}
     
-    console.log('making request')
+    var url = `http://${setRequiredVariable('SERVER_DB_URL')}:${setRequiredVariable('SERVER_DB_PORT')}${setRequiredVariable('GET_SERVICES_ENDPOINT')}`
     var res_db = await axios.post(url,
       {
         email: res_user.email, 
         logger_Key: req.body.body.login_api_apiKey_S.toString()
       }
       )
-    console.log('request complete')
-    console.log(res_db.data)
+
     logger.info("loadbalancer: my_services: data_received: " + res_db.data.logger_key +": " + encryptData(JSON.stringify(req.body)))
     return res.status(200).send({services: res_db.data.tasks})
   } catch (e: any) {
     console.log(e)
     if(e.response) {
-      logger.error('loadbalancer: my_services_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + e.response.data.message.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
+      logger.info('loadbalancer: my_services_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + e.response.data.message.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
     } else if(e.stack) {
-      logger.error('loadbalancer: my_services_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + e.stack.toString()+ " for__:" + encryptData(JSON.stringify(req.body)))
+      logger.info('loadbalancer: my_services_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + e.stack.toString()+ " for__:" + encryptData(JSON.stringify(req.body)))
     } else {
-      logger.error('loadbalancer: my_services_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + e.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
+      logger.info('loadbalancer: my_services_error: ' + req.body.body.login_api_apiKey_S.toString() +": " + e.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
     }
 
     return res.status(500).json({
@@ -69,7 +65,7 @@ const encrypt_login = async (req: Request, res: Response) => {
 
     logger.info("loadbalancer: encrypt_login: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
      
-    let _res: any = await checkUserDetails(req, logger, res, "encrypt_login")
+    let _res: any = await checkLoginDetails(req, logger, res, "encrypt_login")
     if(!_res.email) {return _res}
 
     var _key = req.body.body.login_api_apiKey.toString().substring(0,15) + encryptData(req.body.body.login_api_apiKey)
@@ -77,9 +73,9 @@ const encrypt_login = async (req: Request, res: Response) => {
     
     return res.status(200).send({login_api_apiKey_enc: _key, login_api_secretKey_enc: _secret, message: '<span class="text-grey-10 text-bold">Login key <span class="text-blue-grey-8">Saved!</span></span>'})
   } catch (e: any) {
-    logger.error('loadbalancer: encrypt_login_error: ' + req.body.body.login_api_apiKey_S +": " + e.stack.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
+    logger.info('loadbalancer: encrypt_login_error: ' + req.body.body.login_api_apiKey_S +": " + e.stack.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
     return res.status(500).json({
-      'message': 'e_login: Unexpected error!'
+      'message': 'e_login: Unexpected error: ' + e.message
     })
   }
 
@@ -88,67 +84,38 @@ const encrypt_login = async (req: Request, res: Response) => {
 const create_new = async (req: Request, res: Response) => {
   try {
     checkLoginKey(res, logger, req, 'c_new', 'create_new')
+    let res_user: any = await checkLoginDetails(req, logger, res, "create_new")
+    if(!res_user.email) {return res_user}
     
-    // let add_jobs = addJobs(req.body)
-    logger.info("loadbalancer: create_new: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
-    // TODO: change https to http if not work
+    let res_api: any = await checkUserDetails(req, logger, res, "create_new")
+    if(!res_api.email) {return res_api}
+    
+    var url = `http://${setRequiredVariable('SERVER_DB_URL')}:${setRequiredVariable('SERVER_DB_PORT')}${setRequiredVariable('GET_SERVICES_ENDPOINT')}`
+    var res_db = await axios.post(url,
+      {
+        email: res_user.email, 
+        logger_Key: req.body.body.login_api_apiKey_S.toString()
+      }
+    )
+    logger.info("loadbalancer: create_new: my_services:" + res_db.data.logger_key +": " + encryptData(JSON.stringify(res_db.data)))
+
+    if(res_db.data.tasks.length >= 5) {
+      throw 'Current limit is 5 running/stopped tasks!'
+    }
+
     var url = `http://${setRequiredVariable(`${mapServers[serverTurn]}_URL`)}:${setRequiredVariable(`${mapServers[serverTurn]}_PORT`)}${setRequiredVariable('CREATE_NEW_ENDPOINT')}`
-    logger.info("loadbalancer: create_new_constructed_url: " + req.body.body.login_api_apiKey_S.toString() +": " + url.toString())
+    logger.info("loadbalancer: create_new_constructed_url: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(url.toString()))
     
-    var result: any = await callCreateNewURL(url, req.body, res)
+    var result: any = await callCreateNewURL(url, req.body, res, res_user.email, res_api.email, req.body.body.login_api_apiKey_S.toString())
     serverTurn++
     if(serverTurn > maxServers) {
       serverTurn = 1
     }
     return result
-
-    // var user_details = await getUserDetails(
-    //   req.body.body.api_key,
-    //   req.body.body.api_secret,
-    //   req.body.body.api_url
-    // )
-
-    // console.log(user_details.data)
-    // user_task_control.set(`${user_details.data.email}.id`, user_details.data.id)
-
-    // console.log(user_details.data)
-    // console.log('DB all')
-    // console.log(user_task_control.all())
-    // console.log(user_task_control.get(user_details.email))
-    // <Result>
-    // console.log(req.body.body)
-    // {
-    //   unique_id: 'b24f29c9-dc65-4167-9833-e3f160d85503',
-    //     api_url: 'https://api.fine.exchange',
-    //       api_key: 'a83849471ef22435094d1536d3287ad14c691cc3',
-    //         api_secret: 'a58873f24e1804672d9fbfc4829b7c9a856eb60ed1b8148a32',
-    //           'task_data_type_plain_pretext_b24f29c9-dc65-4167-9833-e3f160d85503': 'buy',
-    //             'task_data_api_plain_pretext_b24f29c9-dc65-4167-9833-e3f160d85503': {
-    //     label: 'first api testing',
-    //       url: 'https://api.fine.exchange',
-    //         description: 'Fine Exchange Mainnet',
-    //           api_key: '룪⸈굫왞䆤⩇წ㦨僮䡅錟ֱ뮬龉짰䂻ʃጡ뢼崢滫♊棿겻◬홱擗\uda50ವ壋䆄\udbb8F鈮輁韒ؙ聣뫕ቯ۶䁬ﭐ',
-    //             api_secret: '룪⸅굠왝䆮⨕ჩ㦨傹䡏錝ֱ뮩龋짲䃦ʎ፲룯嵲滩☖棾결▶홱擕\uda0d೥壇䇒\udbb8\x1A鉽轔鞁ُ芖䢄⠟鿠ꅠ췚⇦䨗蹞㿚᐀奱私롛㉪',
-    //               api_update_date: '12/05/2022, 08:13:09'
-    //   },
-    //   'task_data_pair_plain_pretext_b24f29c9-dc65-4167-9833-e3f160d85503': { label: 'ETH/USDT', value: 'ETH/USDT' },
-    //   'task_data_interval_plain_pretext_b24f29c9-dc65-4167-9833-e3f160d85503': '1313',
-    //   'task_data_spread_percent_plain_pretext_b24f29c9-dc65-4167-9833-e3f160d85503': '1',
-    //   'task_data_state_plain_pretext_b24f29c9-dc65-4167-9833-e3f160d85503': 'stopped',
-    //   'task_data_date_plain_pretext_b24f29c9-dc65-4167-9833-e3f160d85503': '22/05/2022, 15:02:10',
-    //   'task_data_amount_plain_pretext_b24f29c9-dc65-4167-9833-e3f160d85503': '3',
-    //   'task_data_id_plain_pretext_b24f29c9-dc65-4167-9833-e3f160d85503': 'b24f29c9-dc65-4167-9833-e3f160d85503'
-    // }
-    // </Result>
-
-    // logger.info("create_new: addJobs: " + add_jobs)
-    // console.log(JSON.stringify(req.body))
-    // {"body":{"task_data_type_plain_pretext_592fb5ab-d1dd-448f-8585-d45cd2fbb52f":"sell","task_data_api_plain_pretext_592fb5ab-d1dd-448f-8585-d45cd2fbb52f":{"label":"first api testing","url":"https://api.fine.exchange","description":"Fine Exchange Mainnet","api_key":"룪⸈굫왞䆤⩇წ㦨僮䡅錟ֱ뮬龉짰䂻ʃጡ뢼崢滫♊棿겻◬홱擗\uda50ವ壋䆄\udbb8F鈮輁韒ؙ聣뫕ቯ۶䁬ﭐ","api_secret":"룪⸅굠왝䆮⨕ჩ㦨傹䡏錝ֱ뮩龋짲䃦ʎ፲룯嵲滩☖棾결▶홱擕\uda0d೥壇䇒\udbb8\u001a鉽轔鞁ُ芖䢄⠟鿠ꅠ췚⇦䨗蹞㿚᐀奱私롛㉪","api_update_date":"12/05/2022, 08:13:09"},"task_data_pair_plain_pretext_592fb5ab-d1dd-448f-8585-d45cd2fbb52f":{"label":"BTC/USDT","value":"BTC/USDT"},"task_data_interval_plain_pretext_592fb5ab-d1dd-448f-8585-d45cd2fbb52f":"555","task_data_spread_percent_plain_pretext_592fb5ab-d1dd-448f-8585-d45cd2fbb52f":"1","task_data_state_plain_pretext_592fb5ab-d1dd-448f-8585-d45cd2fbb52f":"stopped","task_data_date_plain_pretext_592fb5ab-d1dd-448f-8585-d45cd2fbb52f":"13/05/2022, 15:25:50","task_data_amount_plain_pretext_592fb5ab-d1dd-448f-8585-d45cd2fbb52f":"14","task_data_id_plain_pretext_592fb5ab-d1dd-448f-8585-d45cd2fbb52f":"0","api_key":"a83849471ef22435094d1536d3287ad14c691cc3","api_secret":"a58873f24e1804672d9fbfc4829b7c9a856eb60ed1b8148a32"}}
-    // return res.status(200).send('data23423235123')
   } catch (e: any) {
-    logger.error('loadbalancer: encrypt_login: ' + e.stack.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
+    logger.info('loadbalancer: encrypt_login: ' + e.stack.toString() + " for__:" + encryptData(JSON.stringify(req.body)))
     return res.status(500).json({
-      'message': 'c_new: Unexpected error'
+      'message': 'c_new: Unexpected error: ' + e.message
     })
   }
 }
@@ -162,12 +129,14 @@ export {
 
 
 
-async function callCreateNewURL(url: string, req_body: any, res: Response) {
+async function callCreateNewURL(url: string, req_body: any, res: Response, login_email: string, api_email: string, logger_key: string) {
   try {
-    console.log(req_body.body)
     let _res = await axios.post(url, {
-      body: req_body.body
+      body: req_body.body,
+      login_email: login_email,
+      api_email: api_email,
     })
+
     logger.info("loadbalancer: create_new_function: " + JSON.stringify(_res.data))
     return res.status(200).send(_res.data.message)
   } catch(e: any) {
