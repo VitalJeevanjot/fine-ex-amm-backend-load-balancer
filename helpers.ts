@@ -72,12 +72,19 @@ const checkLoginKey = async (req: any, logger: any, res:any, path: string, full_
 const checkLoginDetails = async(req: any, logger:any, res: any, route: string) => {
   let user: any
   try {
-    // console.log("-" + decryptData(req.body.body.login_api_apiKey.toString().substring(15)))
-    // console.log("-" + decryptData(req.body.body.login_api_secretKey))
+    // console.log("-" + req.body.body.login_api_apiKey)
+    // console.log("-" + req.body.body.login_api_secretKey)
     // console.log("-" + req.body.body.login_api_exchangeURL)
+    var key = 
     user = await getUserDetails(
-      decryptData(req.body.body.login_api_apiKey.toString().substring(15)), 
-      decryptData(req.body.body.login_api_secretKey), 
+      (route == 'encrypt_login') ? 
+      req.body.body.login_api_apiKey : 
+      decryptData(req.body.body.login_api_apiKey.toString().substring(15)),
+
+      (route == 'encrypt_login') ? 
+      req.body.body.login_api_secretKey : 
+      decryptData(req.body.body.login_api_secretKey),
+      
       req.body.body.login_api_exchangeURL
     )
     // console.log(user.data)
