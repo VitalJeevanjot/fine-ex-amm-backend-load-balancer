@@ -26,7 +26,7 @@ var serverTurn = 1;
 const my_services = async (req: Request, res: Response) => {
   try {
     logger.info('\n\n')
-    
+
     await checkLoginKey(req, logger, res, 'm_services', 'my_services')
     
     logger.info("loadbalancer: my_services: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
@@ -94,7 +94,7 @@ const encrypt_login = async (req: Request, res: Response) => {
 const create_new = async (req: Request, res: Response) => {
   try {
     logger.info('\n\n')
-
+    // TODO: create a check all fields (limits etc. function here)
     await checkLoginKey(req, logger, res, 'c_new', 'create_new')
     let res_user: any = await checkLoginDetails(req, logger, res, "create_new")
     if(!res_user.email) {return res_user}
@@ -146,7 +146,6 @@ export {
 
 async function callCreateNewURL(url: string, req_body: any, res: Response, login_email: string, api_email: string, logger_key: string) {
   try {
-    logger.info('\n\n')
     let _res = await axios.post(url, {
       body: req_body.body,
       login_email: login_email,
