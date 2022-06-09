@@ -25,6 +25,8 @@ var serverTurn = 1;
 
 const my_services = async (req: Request, res: Response) => {
   try {
+    logger.info('\n\n')
+    
     await checkLoginKey(req, logger, res, 'm_services', 'my_services')
     
     logger.info("loadbalancer: my_services: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
@@ -63,6 +65,8 @@ const my_services = async (req: Request, res: Response) => {
 
 const encrypt_login = async (req: Request, res: Response) => {
   try {
+    logger.info('\n\n')
+
     await checkLoginKey(req, logger, res, 'e_login', 'encrypt_login')
 
     logger.info("loadbalancer: encrypt_login: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
@@ -89,6 +93,8 @@ const encrypt_login = async (req: Request, res: Response) => {
 
 const create_new = async (req: Request, res: Response) => {
   try {
+    logger.info('\n\n')
+
     await checkLoginKey(req, logger, res, 'c_new', 'create_new')
     let res_user: any = await checkLoginDetails(req, logger, res, "create_new")
     if(!res_user.email) {return res_user}
@@ -140,6 +146,7 @@ export {
 
 async function callCreateNewURL(url: string, req_body: any, res: Response, login_email: string, api_email: string, logger_key: string) {
   try {
+    logger.info('\n\n')
     let _res = await axios.post(url, {
       body: req_body.body,
       login_email: login_email,
@@ -151,9 +158,9 @@ async function callCreateNewURL(url: string, req_body: any, res: Response, login
     }
     return res.status(200).send(_res.data.message)
   } catch(e: any) {
-    logger.info("loadbalancer: create_new_function_error...")
+    logger.info("loadbalancer: create_new_function_error: " + e.toString())
     return res.status(500).send({
-      'message': 'c_new_fn: Unexpected error: ' + e.toString()
+      'message': 'c_new_fn: Unexpected error: ' + e.toString().substring(0, 50)
     })
   }
 }
