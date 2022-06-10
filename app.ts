@@ -17,6 +17,7 @@ app.use(function (req, res, next) {
 });
 
 // app.get('/', queueController.say_hello)
+app.get('/hello', queueController.hello)
 app.post('/my_services', queueController.my_services)
 app.post('/create_new', queueController.create_new)
 app.post('/encrypt_login', queueController.encrypt_login)

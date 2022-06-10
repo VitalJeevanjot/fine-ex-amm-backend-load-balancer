@@ -23,16 +23,20 @@ var mapServers: any = {
 }
 var serverTurn = 1;
 
+const hello = async (req: Request, res: Response) => {
+  return res.status(200).send("Hello")
+}
+
 const my_services = async (req: Request, res: Response) => {
   try {
     logger.info('\n\n')
 
     await checkLoginKey(req, logger, res, 'm_services', 'my_services')
-    
     logger.info("loadbalancer: my_services: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
     
     let res_user: any = await checkLoginDetails(req, logger, res, "my_services")
     if(!res_user.email) {return res_user}
+    logger.info("loadbalancer: my_services:" + res_db.data.logger_key +": res_user: " + encryptData(JSON.stringify(res_user)))
     
     var url = `http://${setRequiredVariable('SERVER_DB_URL')}:${setRequiredVariable('SERVER_DB_PORT')}${setRequiredVariable('GET_SERVICES_ENDPOINT')}`
     var res_db = await axios.post(url,
@@ -40,7 +44,7 @@ const my_services = async (req: Request, res: Response) => {
         email: res_user.email, 
         logger_Key: req.body.body.login_api_apiKey_S.toString()
       }
-      )
+    )
 
     logger.info("loadbalancer: my_services: data_received: " + res_db.data.logger_key +": " + encryptData(JSON.stringify(req.body)))
     return res.status(200).send({services: res_db.data.tasks})
@@ -98,9 +102,12 @@ const create_new = async (req: Request, res: Response) => {
     await checkLoginKey(req, logger, res, 'c_new', 'create_new')
     let res_user: any = await checkLoginDetails(req, logger, res, "create_new")
     if(!res_user.email) {return res_user}
+    logger.info("loadbalancer: create_new: my_services:" + res_db.data.logger_key +": res_user: " + encryptData(JSON.stringify(res_user)))
     
     let res_api: any = await checkUserDetails(req, logger, res, "create_new")
     if(!res_api.email) {return res_api}
+    logger.info("loadbalancer: create_new: my_services:" + res_db.data.logger_key +": res_api: " + encryptData(JSON.stringify(res_api)))
+    
     
     var url = `http://${setRequiredVariable('SERVER_DB_URL')}:${setRequiredVariable('SERVER_DB_PORT')}${setRequiredVariable('GET_SERVICES_ENDPOINT')}`
     var res_db = await axios.post(url,
@@ -109,7 +116,7 @@ const create_new = async (req: Request, res: Response) => {
         logger_Key: req.body.body.login_api_apiKey_S.toString()
       }
     )
-    logger.info("loadbalancer: create_new: my_services:" + res_db.data.logger_key +": " + encryptData(JSON.stringify(res_db.data)))
+    logger.info("loadbalancer: create_new: my_services:" + res_db.data.logger_key +": res_db: " + encryptData(JSON.stringify(res_db.data)))
 
     if(res_db.data.tasks.length >= 5) {
       throw 'Current limit is 5 running/stopped tasks!'
@@ -139,7 +146,8 @@ const create_new = async (req: Request, res: Response) => {
 export {
   my_services,
   create_new,
-  encrypt_login
+  encrypt_login,
+  hello
 }
 
 
@@ -159,7 +167,7 @@ async function callCreateNewURL(url: string, req_body: any, res: Response, login
   } catch(e: any) {
     logger.info("loadbalancer: create_new_function_error: " + e.toString())
     return res.status(500).send({
-      'message': 'c_new_fn: Unexpected error: ' + e.toString().substring(0, 50)
+      'message': 'c_new_fn: Unexpected error: ' + e.toString().substring(17)
     })
   }
 }
