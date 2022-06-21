@@ -122,9 +122,9 @@ const create_new = async (req: Request, res: Response) => {
     if(req.body.body.spread_percent > 2) throw "error 8124"
     if(req.body.body.seconds_interval < 10) throw "error 8142" // TODO: change seconds inteval to 400 here and in front-end as min
     if(req.body.body.seconds_interval > 10000) throw "error 8214"
-    if(parseFloat(req.body.body.amount) == NaN) throw "error 8241"
-    if(parseFloat(req.body.body.spread_percent) == NaN) throw "error 8412"
-    if(parseFloat(req.body.body.seconds_interval) == NaN) throw "error 8421"
+    if(isNaN(parseFloat(req.body.body.amount))) throw "error 8241"
+    if(isNaN(parseFloat(req.body.body.spread_percent))) throw "error 8412"
+    if(isNaN(parseFloat(req.body.body.seconds_interval))) throw "error 8421"
   } catch(e: any) {
     if(res.headersSent) {
       return
