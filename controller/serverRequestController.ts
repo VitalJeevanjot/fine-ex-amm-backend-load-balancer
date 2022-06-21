@@ -131,7 +131,7 @@ const create_new = async (req: Request, res: Response) => {
     }
     logger.info('loadbalancer: create_new: type_checks: ' + req.body.body.login_api_apiKey_S.toString() + ": " + "e_message: " + e + ": e_stack: " + e.stack + " for__:" + encryptData(JSON.stringify(req.body)))
     return res.status(500).json({
-      'message': 'c_new_yt: Unexpected error: ' + e.message
+      'message': 'c_new_yt: Unexpected error: ' + e
     })
   }
   try {
@@ -155,7 +155,7 @@ const create_new = async (req: Request, res: Response) => {
     logger.info("loadbalancer: create_new: my_services:" + res_db.data.logger_key +": res_db: " + encryptData(JSON.stringify(res_db.data)))
 
     if(res_db.data.tasks.length >= 5) {
-      throw 'Current limit is 5 running/stopped tasks!'
+      throw 'Current limit is 5 for running/stopped tasks!'
     }
 
     var url = `http://${setRequiredVariable(`${mapServers[serverTurn]}_URL`)}:${setRequiredVariable(`${mapServers[serverTurn]}_PORT`)}${setRequiredVariable('CREATE_NEW_ENDPOINT')}`
@@ -173,7 +173,7 @@ const create_new = async (req: Request, res: Response) => {
     }
     logger.info('loadbalancer: create_new: ' + ": e_message: " + e + ": e_stack: " + e.stack + " for__:" + encryptData(JSON.stringify(req.body)))
     return res.status(500).json({
-      'message': 'c_new: Unexpected error: ' + e.message
+      'message': 'c_new: Unexpected error: ' + e
     })
   }
 }
