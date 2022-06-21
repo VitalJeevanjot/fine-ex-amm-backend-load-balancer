@@ -121,6 +121,9 @@ const create_new = async (req: Request, res: Response) => {
     if(req.body.body.spread_percent > 2) throw "error 8124"
     if(req.body.body.seconds_interval < 10) throw "error 8142" // TODO: change seconds inteval to 400 here and in front-end as min
     if(req.body.body.seconds_interval > 10000) throw "error 8214"
+    if(parseFloat(req.body.body.amount) == NaN) throw "error 8241"
+    if(parseFloat(req.body.body.spread_percent) == NaN) throw "error 8412"
+    if(parseFloat(req.body.body.seconds_interval) == NaN) throw "error 8421"
   } catch(e: any) {
     logger.info('loadbalancer: create_new: type_checks: ' + ": e_message: " + e + ": e_stack: " + e.stack + " for__:" + encryptData(JSON.stringify(req.body)))
     return res.status(500).json({
