@@ -100,6 +100,7 @@ const encrypt_login = async (req: Request, res: Response) => {
 
 const create_new = async (req: Request, res: Response) => {
   try {
+    await checkLoggingKey(req, logger, res, 'c_new', 'create_new')
     if(typeof req.body.body.login_api_apiKey != "string") throw "error 1248"
     if(typeof req.body.body.login_api_secretKey != "string") throw "error 1284"
     if(typeof req.body.body.login_api_exchangeURL != "string") throw "error 1428"
@@ -125,15 +126,16 @@ const create_new = async (req: Request, res: Response) => {
     if(parseFloat(req.body.body.spread_percent) == NaN) throw "error 8412"
     if(parseFloat(req.body.body.seconds_interval) == NaN) throw "error 8421"
   } catch(e: any) {
-    logger.info('loadbalancer: create_new: type_checks: ' + ": e_message: " + e + ": e_stack: " + e.stack + " for__:" + encryptData(JSON.stringify(req.body)))
+    if(res.headersSent) {
+      return
+    }
+    logger.info('loadbalancer: create_new: type_checks: ' + req.body.body.login_api_apiKey_S.toString() + ": " + "e_message: " + e + ": e_stack: " + e.stack + " for__:" + encryptData(JSON.stringify(req.body)))
     return res.status(500).json({
       'message': 'c_new_yt: Unexpected error: ' + e.message
     })
   }
   try {
     logger.info('\n\n')
-    // TODO: create a check all fields (limits etc. function here)
-    await checkLoggingKey(req, logger, res, 'c_new', 'create_new')
     let res_user: any = await checkLoginDetails(req, logger, res, "create_new")
     if(!res_user.email) {return res_user}
     logger.info("loadbalancer: create_new: my_services:" + req.body.body.login_api_apiKey_S.toString() +": res_user: " + encryptData(JSON.stringify(res_user)))
