@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { 
   setRequiredVariable, 
   encryptData, 
-  checkLoginKey,
+  checkLoggingKey,
   checkLoginDetails,
   checkUserDetails
 } from '../helpers';
@@ -31,7 +31,7 @@ const my_services = async (req: Request, res: Response) => {
   try {
     logger.info('\n\n')
 
-    await checkLoginKey(req, logger, res, 'm_services', 'my_services')
+    await checkLoggingKey(req, logger, res, 'm_services', 'my_services')
     logger.info("loadbalancer: my_services: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
     
     let res_user: any = await checkLoginDetails(req, logger, res, "my_services")
@@ -74,7 +74,7 @@ const encrypt_login = async (req: Request, res: Response) => {
   try {
     logger.info('\n\n')
 
-    await checkLoginKey(req, logger, res, 'e_login', 'encrypt_login')
+    await checkLoggingKey(req, logger, res, 'e_login', 'encrypt_login')
 
     logger.info("loadbalancer: encrypt_login: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
      
@@ -100,9 +100,28 @@ const encrypt_login = async (req: Request, res: Response) => {
 
 const create_new = async (req: Request, res: Response) => {
   try {
+    if(typeof req.body.body.login_api_apiKey != "string") throw "error 1248"
+    if(typeof req.body.body.login_api_secretKey != "string") throw "error 1284"
+    if(typeof req.body.body.login_api_exchangeURL != "string") throw "error 1428"
+    if(typeof req.body.body.api_url != "string") throw "error 1482"
+    if(typeof req.body.body.api_key != "string") throw "error 1824"
+    if(typeof req.body.body.api_secret != "string") throw "error 1842"
+    if(typeof req.body.body.side != "string") throw "error 2148"
+    if(typeof req.body.body.symbol != "string") throw "error 2184"
+    if(req.body.body.type != "limit") throw "error 8214"
+    if(typeof req.body.body.seconds_interval != "number") throw "error 2418"
+    if(typeof req.body.body.amount != "number") throw "error 2481"
+    if(typeof req.body.body.task_uuid != "string") throw "error 2814"
+  } catch(e) {
+    logger.info('loadbalancer: create_new: type_checks: ' + ": e_message: " + e + ": e_stack: " + e.stack + " for__:" + encryptData(JSON.stringify(req.body)))
+    return res.status(500).json({
+      'message': 'c_new_yt: Unexpected error: ' + e.message
+    })
+  }
+  try {
     logger.info('\n\n')
     // TODO: create a check all fields (limits etc. function here)
-    await checkLoginKey(req, logger, res, 'c_new', 'create_new')
+    await checkLoggingKey(req, logger, res, 'c_new', 'create_new')
     let res_user: any = await checkLoginDetails(req, logger, res, "create_new")
     if(!res_user.email) {return res_user}
     logger.info("loadbalancer: create_new: my_services:" + req.body.body.login_api_apiKey_S.toString() +": res_user: " + encryptData(JSON.stringify(res_user)))

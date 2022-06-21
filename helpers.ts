@@ -55,14 +55,18 @@ const getUserDetails = async (api_key: string, api_secret: string, api_url: stri
 }
 
 
-const checkLoginKey = async (req: any, logger: any, res:any, path: string, full_path: string) => {
+const checkLoggingKey = async (req: any, logger: any, res:any, path: string, full_path: string) => {
   try {
+      if(req.body.body.login_api_apiKey_S.toString().length != 15) {
+        logger.info("loadbalancer: helpers: checkLoggingKey: " + full_path + ": keys_length_not_correct: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
+        throw "API key for logs not provided"
+      }
       if(req.body.body.login_api_apiKey_S.toString() != req.body.body.login_api_apiKey.toString().substring(0,15)) {
-        logger.info("loadbalancer: helpers: checkLoginKey: " + full_path + ": keys_not_matched: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
+        logger.info("loadbalancer: helpers: checkLoggingKey: " + full_path + ": keys_not_matched: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(req.body)))
         throw "API key for logs not provided"
       }
     } catch(e) {
-      logger.info("loadbalancer: helpers: checkLoginKey: " + full_path + ": " + "API key for logs not provided or not correct length: " + req.body.body.login_api_apiKey_S + " :" + encryptData(JSON.stringify(req.body)))
+      logger.info("loadbalancer: helpers: checkLoggingKey: " + full_path + ": " + "API key for logs not provided or not correct length: " + req.body.body.login_api_apiKey_S + " :" + encryptData(JSON.stringify(req.body)))
       return res.status(500).json({
         'message': path + ': cl_key: Error from client side!'
       })
@@ -124,7 +128,7 @@ const checkUserDetails = async(req: any, logger:any, res: any, route: string) =>
 export {
   setRequiredVariable,
   getUserDetails,
-  checkLoginKey,
+  checkLoggingKey,
   checkLoginDetails,
   checkUserDetails,
   encryptData,
