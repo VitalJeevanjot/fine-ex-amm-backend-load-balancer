@@ -119,7 +119,7 @@ const create_new = async (req: Request, res: Response) => {
     if(req.body.body.spread_percent > 2) throw "error 4812"
     if(req.body.body.seconds_interval < 10) throw "error 4821" // TODO: change seconds inteval to 400 here and in front-end as min
     if(req.body.body.seconds_interval > 10000) throw "error 8124"
-  } catch(e) {
+  } catch(e: any) {
     logger.info('loadbalancer: create_new: type_checks: ' + ": e_message: " + e + ": e_stack: " + e.stack + " for__:" + encryptData(JSON.stringify(req.body)))
     return res.status(500).json({
       'message': 'c_new_yt: Unexpected error: ' + e.message
