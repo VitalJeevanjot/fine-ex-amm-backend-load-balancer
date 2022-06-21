@@ -107,18 +107,20 @@ const create_new = async (req: Request, res: Response) => {
     if(typeof req.body.body.api_key != "string") throw "error 1824"
     if(typeof req.body.body.api_secret != "string") throw "error 1842"
     if(typeof req.body.body.side != "string") throw "error 2148"
-    if(typeof req.body.body.symbol != "string") throw "error 2184"
-    if(req.body.body.type != "limit") throw "error 2418"
-    if(typeof req.body.body.seconds_interval != "number") throw "error 2481"
-    if(typeof req.body.body.spread_percent != "number") throw "error 2814"
-    if(typeof req.body.body.amount != "number") throw "error 2841"
-    if(typeof req.body.body.task_uuid != "string") throw "error 4128"
-    if(req.body.body.amount < 0.001) throw "error 4182"
-    if(req.body.body.amount > 100) throw "error 4218"
-    if(req.body.body.spread_percent < 0.01) throw "error 4281"
-    if(req.body.body.spread_percent > 2) throw "error 4812"
-    if(req.body.body.seconds_interval < 10) throw "error 4821" // TODO: change seconds inteval to 400 here and in front-end as min
-    if(req.body.body.seconds_interval > 10000) throw "error 8124"
+    if(typeof req.body.body.symbol != "object") throw "error 2184"
+    if(typeof req.body.body.symbol.value != "string") throw "error 2418"
+    if(typeof req.body.body.symbol.value.split('/')[0] != "string") throw "error 2481"
+    if(req.body.body.type != "limit") throw "error 2814"
+    if(typeof req.body.body.seconds_interval != "number") throw "error 2841"
+    if(typeof req.body.body.spread_percent != "number") throw "error 4128"
+    if(typeof req.body.body.amount != "number") throw "error 4182"
+    if(typeof req.body.body.task_uuid != "string") throw "error 4218"
+    if(req.body.body.amount < 0.001) throw "error 4281"
+    if(req.body.body.amount > 100) throw "error 4812"
+    if(req.body.body.spread_percent < 0.01) throw "error 4821"
+    if(req.body.body.spread_percent > 2) throw "error 8124"
+    if(req.body.body.seconds_interval < 10) throw "error 8142" // TODO: change seconds inteval to 400 here and in front-end as min
+    if(req.body.body.seconds_interval > 10000) throw "error 8214"
   } catch(e: any) {
     logger.info('loadbalancer: create_new: type_checks: ' + ": e_message: " + e + ": e_stack: " + e.stack + " for__:" + encryptData(JSON.stringify(req.body)))
     return res.status(500).json({

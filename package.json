@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node dist/app.js",
     "dev": "nodemon app.ts",
+    "data": "ts-node demo/test_decrypt.ts",
     "build": "tsc -p ."
   },
   "keywords": [],
