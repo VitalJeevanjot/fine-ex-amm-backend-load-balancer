@@ -125,6 +125,10 @@ const create_new = async (req: Request, res: Response) => {
     if(isNaN(parseFloat(req.body.body.amount))) throw "error 8241"
     if(isNaN(parseFloat(req.body.body.spread_percent))) throw "error 8412"
     if(isNaN(parseFloat(req.body.body.seconds_interval))) throw "error 8421"
+    if(typeof req.body.body.api_name != "string") throw "error 161248"
+    if(typeof req.body.body.api_desc != "string") throw "error 161428"
+    logger.info('\n\n')
+    logger.info('loadbalancer: create_new: called: ' + encryptData(JSON.stringify(req.body)))
   } catch(e: any) {
     if(res.headersSent) {
       return
@@ -135,7 +139,6 @@ const create_new = async (req: Request, res: Response) => {
     })
   }
   try {
-    logger.info('\n\n')
     let res_user: any = await checkLoginDetails(req, logger, res, "create_new")
     if(!res_user.email) {return res_user}
     logger.info("loadbalancer: create_new: my_services:" + req.body.body.login_api_apiKey_S.toString() +": res_user: " + encryptData(JSON.stringify(res_user)))
