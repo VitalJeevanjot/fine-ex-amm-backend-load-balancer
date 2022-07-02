@@ -100,6 +100,7 @@ const encrypt_login = async (req: Request, res: Response) => {
 
 const create_new = async (req: Request, res: Response) => {
   try {
+    logger.info('\n\n')
     await checkLoggingKey(req, logger, res, 'c_new', 'create_new')
     if(typeof req.body.body.login_api_apiKey != "string") throw "error 1248"
     if(typeof req.body.body.login_api_secretKey != "string") throw "error 1284"
@@ -127,7 +128,6 @@ const create_new = async (req: Request, res: Response) => {
     if(isNaN(parseFloat(req.body.body.seconds_interval))) throw "error 8421"
     if(typeof req.body.body.api_name != "string") throw "error 161248"
     if(typeof req.body.body.api_desc != "string") throw "error 161428"
-    logger.info('\n\n')
     logger.info('loadbalancer: create_new: called: ' + encryptData(JSON.stringify(req.body)))
   } catch(e: any) {
     if(res.headersSent) {
