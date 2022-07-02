@@ -100,6 +100,8 @@ const encrypt_login = async (req: Request, res: Response) => {
 
 const create_new = async (req: Request, res: Response) => {
   try {
+    logger.info('\n\n')
+    logger.info('loadbalancer: create_new: called: ' + encryptData(JSON.stringify(req.body)))
     await checkLoggingKey(req, logger, res, 'c_new', 'create_new')
     if(typeof req.body.body.login_api_apiKey != "string") throw "error 1248"
     if(typeof req.body.body.login_api_secretKey != "string") throw "error 1284"
@@ -116,19 +118,17 @@ const create_new = async (req: Request, res: Response) => {
     if(typeof req.body.body.spread_percent != "string") throw "error 4128"
     if(typeof req.body.body.amount != "string") throw "error 4182"
     if(typeof req.body.body.task_uuid != "string") throw "error 4218"
-    if(req.body.body.amount < 0.001) throw "error 4281"
-    if(req.body.body.amount > 100) throw "error 4812"
-    if(req.body.body.spread_percent < 0.01) throw "error 4821"
-    if(req.body.body.spread_percent > 2) throw "error 8124"
-    if(req.body.body.seconds_interval < 10) throw "error 8142" // TODO: change seconds inteval to 400 here and in front-end as min
-    if(req.body.body.seconds_interval > 10000) throw "error 8214"
+    if(!(req.body.body.amount <= 100)) throw "error 4281" // !() also tacking problem of someone passing string in amount ("hello" <=/>= 100) will return always false
+    if(!(req.body.body.amount >= 0.001)) throw "error 4812"
+    if(!(req.body.body.spread_percent <= 2)) throw "error 4821"
+    if(!(req.body.body.spread_percent >= 0.01)) throw "error 8124"
+    if(!(req.body.body.seconds_interval <= 10000)) throw "error 8142" 
+    if(!(req.body.body.seconds_interval >= 10)) throw "error 8214" // TODO: change seconds inteval to 400 here and in front-end as min
     if(isNaN(parseFloat(req.body.body.amount))) throw "error 8241"
     if(isNaN(parseFloat(req.body.body.spread_percent))) throw "error 8412"
     if(isNaN(parseFloat(req.body.body.seconds_interval))) throw "error 8421"
     if(typeof req.body.body.api_name != "string") throw "error 161248"
     if(typeof req.body.body.api_desc != "string") throw "error 161428"
-    logger.info('\n\n')
-    logger.info('loadbalancer: create_new: called: ' + encryptData(JSON.stringify(req.body)))
   } catch(e: any) {
     if(res.headersSent) {
       return
