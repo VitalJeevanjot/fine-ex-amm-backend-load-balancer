@@ -88,7 +88,7 @@ const checkLoginDetails = async(req: any, logger:any, res: any, route: string) =
       req.body.body.login_api_secretKey : 
       decryptData(req.body.body.login_api_secretKey),
       
-      'https://apitest.fine.exchange' //TODO: make it testnet
+      'https://apitest.fine.exchange' //TODO: make it mainnet
     )
     // console.log(user.data)
     logger.info("loadbalancer: helpers: checkLoginDetails: " + route + ": " + "fetch_user_data: " + req.body.body.login_api_apiKey_S.toString() +": " + encryptData(JSON.stringify(user.data)))
