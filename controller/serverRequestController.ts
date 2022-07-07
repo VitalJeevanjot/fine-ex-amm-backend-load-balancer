@@ -134,6 +134,7 @@ const create_new = async (req: Request, res: Response) => {
       return
     }
     logger.info('loadbalancer: create_new: type_checks: ' + req.body.body.login_api_apiKey_S.toString() + ": " + "e_message: " + e + ": e_stack: " + e.stack + " for__:" + encryptData(JSON.stringify(req.body)))
+    // yt for ty of type (because it is a type error, illegal)
     return res.status(500).json({
       'message': 'c_new_yt: Unexpected error: ' + e
     })
@@ -141,11 +142,11 @@ const create_new = async (req: Request, res: Response) => {
   try {
     let res_user: any = await checkLoginDetails(req, logger, res, "create_new")
     if(!res_user.email) {return res_user}
-    logger.info("loadbalancer: create_new: my_services:" + req.body.body.login_api_apiKey_S.toString() +": res_user: " + encryptData(JSON.stringify(res_user)))
+    logger.info("loadbalancer: create_new: user_scan:" + req.body.body.login_api_apiKey_S.toString() +": res_user: " + encryptData(JSON.stringify(res_user)))
     
     let res_api: any = await checkUserDetails(req, logger, res, "create_new")
     if(!res_api.email) {return res_api}
-    logger.info("loadbalancer: create_new: my_services:" + req.body.body.login_api_apiKey_S.toString() +": res_api: " + encryptData(JSON.stringify(res_api)))
+    logger.info("loadbalancer: create_new: api_scan:" + req.body.body.login_api_apiKey_S.toString() +": res_api: " + encryptData(JSON.stringify(res_api)))
     
     
     var url = `http://${setRequiredVariable('SERVER_DB_URL')}:${setRequiredVariable('SERVER_DB_PORT')}${setRequiredVariable('GET_SERVICES_ENDPOINT')}`
@@ -184,6 +185,52 @@ const create_new = async (req: Request, res: Response) => {
 
 const delete_service = async (req: Request, res: Response) => {
   // first delete order then delete service
+  try {
+    logger.info('\n\n')
+    await checkLoggingKey(req, logger, res, 'd_service', 'delete_service')
+    if(typeof req.body.body.login_api_apiKey != "string") throw "error 1248"
+    if(typeof req.body.body.login_api_secretKey != "string") throw "error 1284"
+    if(typeof req.body.body.id != "string") throw "error 1824"
+    if(req.body.body.id.length != 40) throw "error 1842"
+    
+    logger.info('loadbalancer: delete_service: called: ' + encryptData(JSON.stringify(req.body)))
+  } catch(e: any) {
+    if(res.headersSent) {
+      return
+    }
+    logger.info('loadbalancer: delete_service: type_checks: ' + req.body.body.login_api_apiKey_S.toString() + ": " + "e_message: " + e + ": e_stack: " + e.stack + " for__:" + encryptData(JSON.stringify(req.body)))
+    return res.status(500).json({
+      'message': 'd_service_yt: Unexpected error: ' + e
+    })
+  }
+
+  try {
+    let res_user: any = await checkLoginDetails(req, logger, res, "create_new")
+    if(!res_user.email) {return res_user}
+    logger.info("loadbalancer: delete_service: user_scan: " + req.body.body.login_api_apiKey_S.toString() +": res_user: " + encryptData(JSON.stringify(res_user)))
+    
+    var url = `http://${setRequiredVariable('SERVER_DB_URL')}:${setRequiredVariable('SERVER_DB_PORT')}${setRequiredVariable('GET_SERVICES_ENDPOINT')}`
+    var res_db = await axios.post(url,
+      {
+        email: res_user.email, 
+        logger_Key: req.body.body.login_api_apiKey_S.toString()
+      }
+    )
+    logger.info("loadbalancer: delete_service: my_services:" + res_db.data.logger_key +": res_db: " + encryptData(JSON.stringify(res_db.data)))
+    console.log(res_db.data.tasks.filter((x: any) => x.taskID == req.body.body.id))
+    if(res_db.data.tasks.filter((x: any) => x.taskID == req.body.body.id)) {
+      // throw 'Current limit is 5 for running/stopped tasks!'
+    }
+    return res.status(200).send({message: '<span class="text-red">Deleted!</span>', status: 'deleted'})
+  } catch (e: any) {
+    if(res.headersSent) {
+      return
+    }
+    logger.info('loadbalancer: delete_service: ' + ": e_message: " + e + ": e_stack: " + e.stack + " for__:" + encryptData(JSON.stringify(req.body)))
+    return res.status(500).json({
+      'message': 'd_service: Unexpected error: ' + e
+    })
+  }
 }
 
 
