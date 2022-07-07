@@ -182,10 +182,16 @@ const create_new = async (req: Request, res: Response) => {
 }
 
 
+const delete_service = async (req: Request, res: Response) => {
+  // first delete order then delete service
+}
+
+
 export {
   my_services,
   create_new,
   encrypt_login,
+  delete_service,
   hello
 }
 

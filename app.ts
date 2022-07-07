@@ -21,7 +21,7 @@ app.get('/hello', queueController.hello)
 app.post('/my_services', queueController.my_services)
 app.post('/create_new', queueController.create_new)
 app.post('/stop_service', queueController.create_new)
-app.post('/delete_service', queueController.create_new)
+app.post('/delete_service', queueController.delete_service)
 app.post('/encrypt_login', queueController.encrypt_login)
 
 app.listen(port, () => {
