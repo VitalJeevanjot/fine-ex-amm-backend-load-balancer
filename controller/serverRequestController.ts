@@ -217,11 +217,18 @@ const delete_service = async (req: Request, res: Response) => {
       }
     )
     logger.info("loadbalancer: delete_service: my_services:" + res_db.data.logger_key +": res_db: " + encryptData(JSON.stringify(res_db.data)))
-    console.log(res_db.data.tasks.filter((x: any) => x.taskID == req.body.body.id))
-    if(res_db.data.tasks.filter((x: any) => x.taskID == req.body.body.id)) {
-      // throw 'Current limit is 5 for running/stopped tasks!'
+    let tasks = res_db.data.tasks.filter((x: any) => x.taskID == req.body.body.id)
+    var _res_db
+    if(tasks) {
+      var url = `http://${setRequiredVariable('SERVER_DB_URL')}:${setRequiredVariable('SERVER_DB_PORT')}/delete_service}`
+      _res_db = await axios.post(url,
+        {
+          body: {...req.body.body, status: 'deleted'}
+        }
+      )
+      logger.info("loadbalancer: delete_service: my_services:" + _res_db.data.logger_key +": res_db: " + encryptData(JSON.stringify(res_db.data)))
     }
-    return res.status(200).send({message: '<span class="text-red">Deleted!</span>', status: 'deleted'})
+    return res.status(200).send({message: _res_db.data.message, status: 'deleted'})
   } catch (e: any) {
     if(res.headersSent) {
       return
