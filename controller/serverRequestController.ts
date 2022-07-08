@@ -216,17 +216,17 @@ const delete_service = async (req: Request, res: Response) => {
         logger_Key: req.body.body.login_api_apiKey_S.toString()
       }
     )
-    logger.info("loadbalancer: delete_service: my_services:" + res_db.data.logger_key +": res_db: " + encryptData(JSON.stringify(res_db.data)))
+    logger.info("loadbalancer: delete_service: my_services: response: " + res_db.data.logger_key +": res_db: " + encryptData(JSON.stringify(res_db.data)))
     let tasks = res_db.data.tasks.filter((x: any) => x.taskID == req.body.body.id)
-    var _res_db
+    var _res_db: any
     if(tasks) {
-      var url = `http://${setRequiredVariable('SERVER_DB_URL')}:${setRequiredVariable('SERVER_DB_PORT')}/delete_service}`
+      var url = `http://${setRequiredVariable('SERVER_DB_URL')}:${setRequiredVariable('SERVER_DB_PORT')}/delete_service`
       _res_db = await axios.post(url,
         {
-          body: {...req.body.body, status: 'deleted'}
+          ...req.body.body, status: 'deleted'
         }
       )
-      logger.info("loadbalancer: delete_service: my_services:" + _res_db.data.logger_key +": res_db: " + encryptData(JSON.stringify(res_db.data)))
+      logger.info("loadbalancer: delete_service: deleted_task: response: " + _res_db.data.logger_key +": res_db: " + encryptData(JSON.stringify(res_db.data)))
     }
     return res.status(200).send({message: _res_db.data.message, status: 'deleted'})
   } catch (e: any) {
