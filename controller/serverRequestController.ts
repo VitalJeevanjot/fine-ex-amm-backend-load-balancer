@@ -84,7 +84,11 @@ const encrypt_login = async (req: Request, res: Response) => {
     var _key = req.body.body.login_api_apiKey.toString().substring(0,15) + encryptData(req.body.body.login_api_apiKey)
     var _secret = encryptData(req.body.body.login_api_secretKey)
     
-    return res.status(200).send({login_api_apiKey_enc: _key, login_api_secretKey_enc: _secret, message: '<span class="text-grey-10 text-bold">Login key <span class="text-blue-grey-8">Saved!</span></span>'})
+    return res.status(200).send({
+      login_api_apiKey_enc: _key, 
+      login_api_secretKey_enc: _secret, 
+      message: '<span class="text-grey-10 text-bold">Login key <span class="text-blue-grey-8">Saved!</span></span>'
+    })
   } catch (e: any) {
     if(res.headersSent) {
       return
