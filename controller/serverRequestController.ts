@@ -244,12 +244,16 @@ const delete_service = async (req: Request, res: Response) => {
   }
 }
 
+const get_support = async (req: Request, res: Response) => {
+
+}
 
 export {
   my_services,
   create_new,
   encrypt_login,
   delete_service,
+  get_support,
   hello
 }
 

@@ -23,6 +23,7 @@ app.post('/create_new', queueController.create_new)
 app.post('/stop_service', queueController.create_new)
 app.post('/delete_service', queueController.delete_service)
 app.post('/encrypt_login', queueController.encrypt_login)
+// app.post('/get_support', queueController.get_support)
 
 app.listen(port, () => {
   logger.info(`loadbalancer: Running at ${port}!`)
