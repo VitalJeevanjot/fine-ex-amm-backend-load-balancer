@@ -27,6 +27,11 @@ const hello = async (req: Request, res: Response) => {
   return res.status(200).send("Hello")
 }
 
+const available_urls = [
+  'https://apitest.fine.exchange',
+  'https://api.fine.exchange'
+]
+
 const my_services = async (req: Request, res: Response) => {
   try {
     logger.info('\n\n')
@@ -132,6 +137,7 @@ const create_new = async (req: Request, res: Response) => {
     if(isNaN(parseFloat(req.body.body.seconds_interval))) throw "error 8421"
     if(typeof req.body.body.api_name != "string") throw "error 161248"
     if(typeof req.body.body.api_desc != "string") throw "error 161428"
+    if(!available_urls.includes(req.body.body.api_url)) throw "error 161482"
     logger.info('loadbalancer: create_new: called: ' + encryptData(JSON.stringify(req.body)))
   } catch(e: any) {
     if(res.headersSent) {
