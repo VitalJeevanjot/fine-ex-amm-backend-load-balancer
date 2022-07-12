@@ -122,9 +122,9 @@ const create_new = async (req: Request, res: Response) => {
     if(typeof req.body.body.symbol.value != "string") throw "error 2418"
     if(typeof req.body.body.symbol.value.split('/')[0] != "string") throw "error 2481"
     if(req.body.body.type != "limit") throw "error 2814"
-    if(typeof req.body.body.seconds_interval != "string") throw "error 2841"
-    if(typeof req.body.body.spread_percent != "string") throw "error 4128"
-    if(typeof req.body.body.amount != "string") throw "error 4182"
+    // if(typeof req.body.body.seconds_interval != "string") throw "error 2841"
+    // if(typeof req.body.body.spread_percent != "string") throw "error 4128"
+    // if(typeof req.body.body.amount != "string") throw "error 4182"
     if(typeof req.body.body.task_uuid != "string") throw "error 4218"
     if(!(req.body.body.amount <= 100)) throw "error 4281" // !() also tacking problem of someone passing string in amount ("hello" <=/>= 100) will return always false
     if(!(req.body.body.amount >= 0.001)) throw "error 4812"
