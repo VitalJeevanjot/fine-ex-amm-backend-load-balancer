@@ -111,33 +111,33 @@ const create_new = async (req: Request, res: Response) => {
   try {
     logger.info('\n\n')
     await checkLoggingKey(req, logger, res, 'c_new', 'create_new')
-    if(typeof req.body.body.login_api_apiKey != "string") throw "error 1248"
-    if(typeof req.body.body.login_api_secretKey != "string") throw "error 1284"
-    if(typeof req.body.body.login_api_exchangeURL != "string") throw "error 1428"
-    if(typeof req.body.body.api_url != "string") throw "error 1482"
-    if(typeof req.body.body.api_key != "string") throw "error 1824"
-    if(typeof req.body.body.api_secret != "string") throw "error 1842"
-    if(typeof req.body.body.side != "string") throw "error 2148"
-    if(typeof req.body.body.symbol != "object") throw "error 2184"
-    if(typeof req.body.body.symbol.value != "string") throw "error 2418"
-    if(typeof req.body.body.symbol.value.split('/')[0] != "string") throw "error 2481"
+    if(typeof req.body.body.login_api_apiKey != "string") {throw "error 1248"}
+    if(typeof req.body.body.login_api_secretKey != "string") {throw "error 1284"}
+    if(typeof req.body.body.login_api_exchangeURL != "string") {throw "error 1428"}
+    if(typeof req.body.body.api_url != "string") {throw "error 1482"}
+    if(typeof req.body.body.api_key != "string") {throw "error 1824"}
+    if(typeof req.body.body.api_secret != "string") {throw "error 1842"}
+    if(typeof req.body.body.side != "string") {throw "error 2148"}
+    if(typeof req.body.body.symbol != "object") {throw "error 2184"}
+    if(typeof req.body.body.symbol.value != "string") {throw "error 2418"}
+    if(typeof req.body.body.symbol.value.split('/')[0] != "string") {throw "error 2481"}
     if(req.body.body.type != "limit") throw "error 2814"
-    if(typeof req.body.body.seconds_interval != "string") throw "error 2841"
-    if(typeof req.body.body.spread_percent != "string") throw "error 4128"
-    if(typeof req.body.body.amount != "string") throw "error 4182"
-    if(typeof req.body.body.task_uuid != "string") throw "error 4218"
-    if(!(parseFloat(req.body.body.amount) <= 100)) throw "error 4281" // !() also tacking problem of someone passing string in amount ("hello" <=/>= 100) will return always false
-    if(!(parseFloat(req.body.body.amount) >= 0.001)) throw "error 4812"
-    if(!(parseFloat(req.body.body.spread_percent) <= 2)) throw "error 4821"
-    if(!(parseFloat(req.body.body.spread_percent) >= 0.01)) throw "error 8124"
-    if(!(parseFloat(req.body.body.seconds_interval) <= 10000)) throw "error 8142" 
-    if(!(parseFloat(req.body.body.seconds_interval) >= 10)) throw "error 8214" // TODO: change seconds inteval to 400 here and in front-end as min
-    if(isNaN(parseFloat(req.body.body.amount))) throw "error 8241"
-    if(isNaN(parseFloat(req.body.body.spread_percent))) throw "error 8412"
-    if(isNaN(parseFloat(req.body.body.seconds_interval))) throw "error 8421"
-    if(typeof req.body.body.api_name != "string") throw "error 161248"
-    if(typeof req.body.body.api_desc != "string") throw "error 161428"
-    if(!available_urls.includes(req.body.body.api_url)) throw "error 161482"
+    if(typeof req.body.body.seconds_interval != "string") {throw "error 2841"}
+    if(typeof req.body.body.spread_percent != "string") {throw "error 4128"}
+    if(typeof req.body.body.amount != "string") {throw "error 4182"}
+    if(typeof req.body.body.task_uuid != "string") {throw "error 4218"}
+    if(!(parseFloat(req.body.body.amount) <= 100)) {throw "error 4281"} // !() also tacking problem of someone passing string in amount ("hello" <=/>= 100) will return always false
+    if(!(parseFloat(req.body.body.amount) >= 0.001)) {throw "error 4812"}
+    if(!(parseFloat(req.body.body.spread_percent) <= 2)) {throw "error 4821"}
+    if(!(parseFloat(req.body.body.spread_percent) >= 0.01)) {throw "error 8124"}
+    if(!(parseFloat(req.body.body.seconds_interval) <= 10000)) {throw "error 8142"}
+    if(!(parseFloat(req.body.body.seconds_interval) >= 10)) {throw "error 8214"} // TODO: change seconds inteval to 400 here and in front-end as min
+    if(isNaN(parseFloat(req.body.body.amount))) {throw "error 8241"}
+    if(isNaN(parseFloat(req.body.body.spread_percent))) {throw "error 8412"}
+    if(isNaN(parseFloat(req.body.body.seconds_interval))) {throw "error 8421"}
+    if(typeof req.body.body.api_name != "string") {throw "error 161248"}
+    if(typeof req.body.body.api_desc != "string") {throw "error 161428"}
+    if(!available_urls.includes(req.body.body.api_url)) {throw "error 161482"}
     logger.info('loadbalancer: create_new: called: ' + encryptData(JSON.stringify(req.body)))
   } catch(e: any) {
     if(res.headersSent) {
