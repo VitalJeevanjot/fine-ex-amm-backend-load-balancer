@@ -1,15 +1,15 @@
 # Fine Exchange AOM: load balancer
 
-Part of **Fine Exchange AOM**, an automated order manager for market makers that I built for my company, Fine Exchange Ltd, in 2022. The [client repository](https://github.com/VitalJeevanjot/Fine-Exchange-AMM) explains the whole system, with a diagram and the path a task takes through the services.
+Part of **Fine Exchange AOM**, an automated order manager for market makers that I built in 2022 as part of Fine Exchange, my crypto exchange project. The [client repository](https://github.com/VitalJeevanjot/Fine-Exchange-AMM) explains the whole system, with a diagram and the path a task takes through the services.
 
-> **Status: shut down.** Fine Exchange closed in 2022 and the fine.exchange domain has expired, so it's no longer mine. Read the code, but don't run it with real API keys.
+> **Status: ended.** The Fine Exchange project ended in 2022 and the fine.exchange domain has expired, so it's no longer mine. Read the code, but don't run it with real API keys.
 
-The API the client calls. It checks who the trader is, enforces limits, and decides which queue server runs each new task.
+The API the client calls. It checks who the user is, enforces limits, and decides which queue server runs each new task.
 
-- `/encrypt_login` checks the trader's exchange API key with a signed request to the exchange's `/v2/user` endpoint, then returns the key and secret encrypted with cryptr.
-- `/create_new` asks the database service for the trader's tasks, refuses a sixth one, and sends the task to the next queue server in turn (round robin across `MAX_SERVERS`).
+- `/encrypt_login` checks the user's exchange API key with a signed request to the exchange's `/v2/user` endpoint, then returns the key and secret encrypted with cryptr.
+- `/create_new` asks the database service for the user's tasks, refuses a sixth one, and sends the task to the next queue server in turn (round robin across `MAX_SERVERS`).
 - `/my_services` and `/delete_service` pass through to the database service after the same checks.
-- Every request carries the first 15 characters of the trader's API key, which the services use to tag their log lines.
+- Every request carries the first 15 characters of the user's API key, which the services use to tag their log lines.
 
 ## Endpoints
 
@@ -18,7 +18,7 @@ The API the client calls. It checks who the trader is, enforces limits, and deci
 | `POST /encrypt_login` | Verify an exchange API key and return it encrypted |
 | `POST /create_new` | Create a task on the next queue server |
 | `POST /stop_service` | Stop a task (same handler as `/create_new`) |
-| `POST /my_services` | The trader's tasks |
+| `POST /my_services` | The user's tasks |
 | `POST /delete_service` | Delete a task |
 | `GET /hello` | Health check |
 
